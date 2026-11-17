@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Forest GIS Hubの記事一覧。林業技術、QGIS、GISデータ、リモートセンシングに関する情報を掲載しています。">
+  <title>記事一覧 | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .articles-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 70px 24px 100px;
+    }
+
+    .articles-heading {
+      margin-bottom: 48px;
+    }
+
+    .articles-heading h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 16px;
+    }
+
+    .articles-heading p {
+      line-height: 1.9;
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: 24px;
+    }
+
+    .article-card {
+      background: #fff;
+      border: 1px solid #e0e8e2;
+      border-radius: 12px;
+      padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(20, 55, 35, 0.08);
+    }
+
+    .article-category {
+      display: inline-block;
+      color: #286647;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .article-card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .article-card p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .article-link {
+      color: #286647;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .article-link:hover {
+      text-decoration: underline;
+    }
+
+    .articles-back {
+      display: inline-block;
+      margin-top: 48px;
+      color: #286647;
+    }
+
+/* 記事検索エリア */
+.article-search {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+
+.article-search label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #244b3a;
+}
+
+.article-search input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #d7e2d9;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #183b32;
+  font: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.article-search input:focus {
+  outline: none;
+  border-color: #367b57;
+  box-shadow: 0 0 0 3px rgba(54, 123, 87, 0.12);
+}
+
+.article-search input::placeholder {
+  color: #82958a;
+}
+
+.article-grid .article-card[hidden] {
+  display: none;
+}
+
+  </style>
+</head>
+<body>
+<div class="topline"><div class="container topline-inner"><span>FORESTRY · GIS · REMOTE SENSING</span><span>森林・林業と地理空間情報のナレッジハブ</span></div></div>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/><path d="M22 30h4v15h-4z" fill="#d8c9a2"/></svg></span>
+        <span><strong>FOREST GIS HUB</strong><small>森林・林業・地理空間情報</small></span>
+      </a>
+      <button class="menu-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a class="active" href="#home">ホーム</a><a href="#topics">特集・記事</a><a href="#map">地図・GIS</a><a href="#data">データ</a><a href="#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+  <main class="articles-main">
+    <div class="articles-heading">
+      <p>FOREST GIS HUB / ARTICLES</p>
+      <h1>記事一覧</h1>
+      <p>
+        林業技術、QGIS、GISデータ、リモートセンシングなど、
+        森林と地理空間情報に関する技術情報を掲載しています。
+      </p>
+    </div>
+
+<div class="article-search">
+  <label for="article-search-input">記事を検索</label>
+  <input
+    type="search"
+    id="article-search-input"
+    placeholder="キーワードを入力（例：QGIS、林道）"
+  >
+</div>
+
+    <div class="article-grid">
+      <article class="article-card">
+        <span class="article-category">QGIS</span>
+        <h2>QGISで森林情報を扱うための基礎</h2>
+        <p>
+          QGISの基本操作から森林GISデータの読み込み、
+          座標参照系の考え方までを解説します。
+        </p>
+        <span>記事準備中</span>
+      </article>
+
+      <article class="article-card">
+        <span class="article-category">林業技術</span>
+        <h2>林道の基礎知識</h2>
+        <p>
+          林道の役割や種類、森林管理における
+          林道の重要性を整理します。
+        </p>
+        <span>記事準備中</span>
+      </article>
+
+      <article class="article-card">
+        <span class="article-category">GISデータ</span>
+        <h2>森林GISで利用できる地理空間データ</h2>
+        <p>
+          標高データ、航空写真、森林に関する
+          地理空間データの特徴を紹介します。
+        </p>
+        <span>記事準備中</span>
+      </article>
+    </div>
+
+    <a class="articles-back" href="../index.html">
+      ← トップページに戻る
+    </a>
+  </main>
+
+<script src="../script.js" defer></script>
+
+<script>
+  const searchInput = document.getElementById("article-search-input");
+  const articleCards = document.querySelectorAll(".article-grid .article-card");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      const keyword = this.value.trim().normalize("NFKC").toLowerCase();
+
+      articleCards.forEach(function (card) {
+        const text = card.textContent.normalize("NFKC").toLowerCase();
+        card.hidden = !text.includes(keyword);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

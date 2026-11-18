@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="QGISとは何か。2002年の誕生から現在までの歴史、オープンソースGISとしての発展、森林・林業分野での活用を解説します。">
+  <title>QGISとは？誕生から現在までの歴史と特徴 | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .blog-layout {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.95;
+      color: #263d32;
+    }
+
+    .blog-breadcrumb {
+      font-size: .85rem;
+      margin-bottom: 32px;
+    }
+
+    .blog-article a, .blog-breadcrumb a {
+      color: #286647;
+    }
+
+    .blog-category {
+      display: inline-block;
+      background: #e7f2e9;
+      color: #286647;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.5;
+      margin: 18px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: .85rem;
+      margin-bottom: 36px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      padding: 24px;
+      background: #f3f7f3;
+      border-left: 4px solid #286647;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      line-height: 1.5;
+      margin: 55px 0 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+      scroll-margin-top: 90px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 16px;
+    }
+
+    .blog-article p { margin-bottom: 22px; }
+
+    .blog-article sup a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .history-timeline {
+      border-left: 3px solid #397653;
+      margin: 35px 0 40px 12px;
+      padding-left: 26px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #397653;
+      border: 3px solid #e7f2e9;
+    }
+
+    .timeline-year {
+      font-weight: bold;
+      color: #286647;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p { margin: 5px 0; }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 24px;
+      position: sticky;
+      top: 30px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin: 0 0 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 13px;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .blog-toc a:hover { text-decoration: underline; }
+
+    .references {
+      padding-left: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .references li {
+      margin-bottom: 20px;
+      padding-left: 5px;
+      font-size: .9rem;
+    }
+
+    .blog-note {
+      padding: 20px;
+      background: #f3f7f3;
+      border-radius: 8px;
+      font-size: .88rem;
+      margin-top: 35px;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 18px 70px;
+      }
+
+      .blog-toc {
+        grid-row: 1;
+        position: static;
+      }
+
+      .blog-title { font-size: 1.85rem; }
+      .blog-article h2 { font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/>
+            <path d="M22 30h4v15h-4z" fill="#d8c9a2"/>
+          </svg>
+        </span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../index.html">ホーム</a>
+        <a class="active" href="index.html">特集・記事</a>
+        <a href="../map.html">地図・GIS</a>
+        <a href="../data/index.html">データ</a>
+        <a href="../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+    <article class="blog-article">
+
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト">
+        <a href="../index.html">ホーム</a> /
+        <a href="index.html">記事一覧</a> /
+        QGISの歴史
+      </nav>
+
+      <header>
+        <span class="blog-category">QGIS・基礎知識</span>
+        <h1 class="blog-title">
+          QGISとは？誕生から現在までの歴史と特徴を解説
+        </h1>
+        <p class="blog-date">公開日：2026年11月18日</p>
+      </header>
+
+      <p class="blog-lead">
+        QGISは、世界中で利用されているオープンソースの
+        地理情報システム（GIS）ソフトウェアです。
+        本記事では、2002年の開発開始から現在に至るまでの歴史と、
+        森林・林業分野での活用について解説します。
+      </p>
+
+      <section id="section1">
+        <h2>1. QGISとは何か</h2>
+        <p>
+          QGISは、地理空間情報の表示、編集、解析、地図作成などを
+          行うことができる、無料のオープンソースGISソフトウェアです。
+          <sup><a href="#ref1">[1]</a></sup>
+        </p>
+        <p>
+          GIS（Geographic Information System：地理情報システム）とは、
+          位置情報を持つデータを管理・分析し、
+          地図などを通じて可視化するための仕組みです。
+        </p>
+        <p>
+          QGISでは、地形図、航空写真、標高データ、土地利用情報など、
+          さまざまな地理空間データを扱うことができます。
+        </p>
+        <p>
+          森林・林業分野でも、森林資源の分布把握、地形解析、
+          林道の位置確認、森林の変化解析などに活用できます。
+        </p>
+        <p>
+          現在では多様な機能を備えるQGISですが、
+          その始まりは地理空間データを表示するための
+          比較的小規模なソフトウェアでした。
+        </p>
+      </section>
+
+      <section id="section2">
+        <h2>2. QGIS誕生の背景</h2>
+
+        <h3>2.1 2002年、開発の始まり</h3>
+        <p>
+          QGISの開発は、2002年にGary Shermanによって
+          始められました。
+          <sup><a href="#ref2">[2]</a></sup>
+        </p>
+        <p>
+          当初の目的は、PostGISに保存された地理空間データを
+          Linux上で表示できるソフトウェアを開発することでした。
+        </p>
+        <p>
+          PostGISは、データベース管理システムPostgreSQLに
+          地理空間情報を扱う機能を追加する拡張機能です。
+        </p>
+        <p>
+          QGISは、こうしたデータを地図として表示するための
+          ツールとして開発が進められました。
+        </p>
+
+        <h3>2.2 オープンソースとしての発展</h3>
+        <p>
+          QGISは、ソースコードを公開する
+          オープンソースソフトウェアとして発展しました。
+        </p>
+        <p>
+          開発初期はデータの表示が中心でしたが、
+          その後、ベクターデータの編集、ラスターデータの表示、
+          地図のレイアウト作成など、多様な機能が追加されました。
+          <sup><a href="#ref2">[2]</a></sup>
+        </p>
+        <p>
+          世界中の開発者や利用者が参加できる開発体制は、
+          QGISの発展を支える重要な特徴となっています。
+          <sup><a href="#ref4">[4]</a></sup>
+        </p>
+      </section>
+
+      <section id="section3">
+        <h2>3. QGISの歴史と主な出来事</h2>
+        <p>
+          QGISの発展における主な出来事を、
+          以下の年表にまとめました。
+        </p>
+
+        <div class="history-timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2002年</div>
+            <p>
+              Gary Shermanによって開発が始まる。
+              当初はLinux上でPostGISデータを表示することが目的だった。
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2009年</div>
+            <p>
+              QGIS 1.0「Kore」が公開。
+              安定したAPIを備え、拡張機能の開発基盤も整備された。
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2013年</div>
+            <p>
+              QGIS 2.0が公開。
+              Quantum GISという名称からQGISへ正式に統一された。
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2018年</div>
+            <p>
+              QGIS 3.0が公開。
+              新しい技術基盤への移行が進められた。
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-year">2025年</div>
+            <p>
+              QGISの開発体制や歴史をまとめた学術論文
+              「The QGIS project: Spatial without compromise」が発表された。
+            </p>
+          </div>
+        </div>
+        <p>
+          年表の主な出典：
+          <a href="#ref2">[2]</a>、
+          <a href="#ref3">[3]</a>、
+          <a href="#ref4">[4]</a>、
+          <a href="#ref5">[5]</a>
+        </p>
+      </section>
+
+      <section id="section4">
+        <h2>4. Quantum GISからQGISへ</h2>
+        <p>
+          QGISは、かつて「Quantum GIS」という名称で
+          知られていました。
+        </p>
+        <p>
+          しかし、Quantum GISとQGISという2つの呼び方が
+          併用されていたため、名称を統一することになりました。
+        </p>
+        <p>
+          2013年9月に公開されたQGIS 2.0では、
+          正式名称が「QGIS」に統一されました。
+          <sup><a href="#ref3">[3]</a></sup>
+        </p>
+        <p>
+          公式変更履歴によると、「Quantum」という言葉自体に
+          特別な意味はなく、名称の統一はプロジェクトの
+          呼称を明確にするためのものでした。
+        </p>
+      </section>
+
+      <section id="section5">
+        <h2>5. オープンソースGISとしての特徴</h2>
+        <p>
+          QGISの大きな特徴は、無料で利用できることに加え、
+          オープンソースとして開発されている点です。
+        </p>
+        <p>
+          QGISはGNU General Public License（GPL）のもとで
+          公開されており、ライセンス条件に従って
+          ソースコードを確認・改変・再配布できます。
+        </p>
+        <p>
+          また、QGISはOSGeo
+          （Open Source Geospatial Foundation）の
+          プロジェクトの一つです。
+        </p>
+        <p>
+          開発にはプログラマーだけでなく、翻訳者、
+          ドキュメント作成者、利用者なども参加しています。
+          <sup><a href="#ref4">[4]</a></sup>
+        </p>
+        <p>
+          プラグインによる機能拡張が可能であり、
+          用途に応じてさまざまな処理を追加できる点も特徴です。
+        </p>
+      </section>
+
+      <section id="section6">
+        <h2>6. 森林・林業分野での活用</h2>
+        <p>
+          QGISは森林・林業分野でも幅広く活用できます。
+        </p>
+        <h3>森林情報の可視化</h3>
+        <p>
+          森林に関するベクターデータを航空写真や地形図と
+          重ね合わせることで、森林の分布や周辺環境を把握できます。
+        </p>
+
+        <h3>地形解析</h3>
+        <p>
+          数値標高モデル（DEM）を利用することで、
+          標高、傾斜、斜面方位などの地形条件を解析できます。
+        </p>
+
+        <h3>森林の変化解析</h3>
+        <p>
+          異なる時期の土地被覆データを比較することで、
+          森林の減少や回復などの空間的な変化を分析できます。
+        </p>
+        <p>
+          このように、QGISは地図表示だけでなく、
+          森林管理や森林研究に必要な情報の整理・解析にも
+          活用できるソフトウェアです。
+        </p>
+      </section>
+
+      <section id="section7">
+        <h2>7. まとめ</h2>
+        <p>
+          QGISは、2002年にGary Shermanによって始められた
+          地理空間データ表示用ソフトウェアを起源としています。
+        </p>
+        <p>
+          2009年のQGIS 1.0公開、2013年の名称統一などを経て、
+          多様な地理空間情報を扱うGISソフトウェアへと発展しました。
+        </p>
+        <p>
+          森林・林業分野でも、森林資源の把握、
+          地形解析、森林変化の分析などに活用できます。
+        </p>
+        <p>
+          今後の記事では、QGISのインストール方法や基本操作、
+          森林GISデータの取り扱いについて解説していきます。
+        </p>
+      </section>
+
+      <section id="references">
+        <h2>参考文献・参考資料</h2>
+        <ol class="references">
+          <li id="ref1">
+            QGIS Development Team.
+            <em>QGIS Geographic Information System</em>.
+            QGIS Association.
+            <a href="https://www.qgis.org/" target="_blank" rel="noopener noreferrer">
+              QGIS公式サイト
+            </a>
+          </li>
+
+          <li id="ref2">
+            Sherman, G.
+            QGIS 1.0公開時の開発者声明.
+            QGIS Project.
+            <a href="https://issues.qgis.org/projects/qgis/wiki/VisualChangelog100"
+               target="_blank" rel="noopener noreferrer">
+              QGIS 1.0変更履歴
+            </a>
+          </li>
+
+          <li id="ref3">
+            QGIS Project (2013).
+            <em>QGIS 2.0 の変更履歴</em>.
+            <a href="https://qgis.org/ja/project/visual-changelogs/visualchangelog200/"
+               target="_blank" rel="noopener noreferrer">
+              公式変更履歴
+            </a>
+          </li>
+
+          <li id="ref4">
+            Graser, A., Sutton, T., &amp; Bernasocchi, M. (2025).
+            The QGIS project: Spatial without compromise.
+            <em>Patterns, 6</em>(7), 101265.
+            <a href="https://doi.org/10.1016/j.patter.2025.101265"
+               target="_blank" rel="noopener noreferrer">
+              DOI: 10.1016/j.patter.2025.101265
+            </a>
+          </li>
+
+          <li id="ref5">
+            QGIS Project (2018).
+            <em>QGIS 3.0 変更履歴</em>.
+            <a href="https://changelog.qgis.org/en/version/300/"
+               target="_blank" rel="noopener noreferrer">
+              変更履歴
+            </a>
+          </li>
+        </ol>
+
+        <div class="blog-note">
+          本記事は、QGIS公式資料および学術文献を参考に、
+          Forest GIS Hubが独自に作成した解説記事です。
+          QGISプロジェクトの公式記事ではありません。
+          QGISの公式情報は
+          <a href="https://qgis.org/" target="_blank" rel="noopener noreferrer">
+            QGIS公式サイト
+          </a>
+          をご確認ください。
+        </div>
+      </section>
+
+      <a class="blog-back" href="index.html">
+        ← 記事一覧に戻る
+      </a>
+    </article>
+
+    <aside class="blog-toc" aria-label="記事の目次">
+      <h2>この記事の目次</h2>
+      <a href="#section1">1. QGISとは何か</a>
+      <a href="#section2">2. QGIS誕生の背景</a>
+      <a href="#section3">3. QGISの歴史と主な出来事</a>
+      <a href="#section4">4. Quantum GISからQGISへ</a>
+      <a href="#section5">5. オープンソースGISの特徴</a>
+      <a href="#section6">6. 森林・林業分野での活用</a>
+      <a href="#section7">7. まとめ</a>
+      <a href="#references">参考文献・参考資料</a>
+    </aside>
+  </main>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

@@ -123,6 +123,62 @@
   display: none;
 }
 
+.article-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 10px 18px;
+  border: 1px solid #d7e2d9;
+  border-radius: 999px;
+  background: #fff;
+  color: #286647;
+  font: inherit;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-btn:hover {
+  background: #edf5ef;
+}
+
+.filter-btn.active {
+  background: #286647;
+  border-color: #286647;
+  color: #fff;
+}
+
+.filter-btn:focus-visible {
+  outline: 3px solid #87b69b;
+  outline-offset: 3px;
+}
+
+#article-count {
+  color: #687b70;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+.article-grid .article-card[hidden] {
+  display: none;
+}
+
+/* 記事が見つからない場合の表示 */
+#article-empty[hidden] {
+  display: none;
+}
+
+#article-empty {
+  padding: 30px;
+  text-align: center;
+  color: #687b70;
+  background: #f3f7f3;
+  border-radius: 10px;
+}
+
+</style>
   </style>
 </head>
 <body>
@@ -164,37 +220,22 @@
   >
 </div>
 
-    <div class="article-grid">
-      <article class="article-card">
-        <span class="article-category">QGIS</span>
-        <h2>QGISで森林情報を扱うための基礎</h2>
-        <p>
-          QGISの基本操作から森林GISデータの読み込み、
-          座標参照系の考え方までを解説します。
-        </p>
-        <span>記事準備中</span>
-      </article>
+<div class="article-filters" aria-label="記事カテゴリ">
+  <button type="button" class="filter-btn active" data-category="all">すべて</button>
+  <button type="button" class="filter-btn" data-category="QGIS">QGIS</button>
+  <button type="button" class="filter-btn" data-category="林業技術">林業技術</button>
+  <button type="button" class="filter-btn" data-category="GISデータ">GISデータ</button>
+</div>
 
-      <article class="article-card">
-        <span class="article-category">林業技術</span>
-        <h2>林道の基礎知識</h2>
-        <p>
-          林道の役割や種類、森林管理における
-          林道の重要性を整理します。
-        </p>
-        <span>記事準備中</span>
-      </article>
+<p id="article-count" aria-live="polite"></p>
 
-      <article class="article-card">
-        <span class="article-category">GISデータ</span>
-        <h2>森林GISで利用できる地理空間データ</h2>
-        <p>
-          標高データ、航空写真、森林に関する
-          地理空間データの特徴を紹介します。
-        </p>
-        <span>記事準備中</span>
-      </article>
-    </div>
+  
+<div class="article-grid" id="article-grid"></div>
+
+<p id="article-empty" hidden>
+  該当する記事はありません。
+</p>
+
 
     <a class="articles-back" href="../index.html">
       ← トップページに戻る
@@ -203,21 +244,128 @@
 
 <script src="../script.js" defer></script>
 
+
+
 <script>
   const searchInput = document.getElementById("article-search-input");
-  const articleCards = document.querySelectorAll(".article-grid .article-card");
+  const articleGrid = document.getElementById("article-grid");
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const articleCount = document.getElementById("article-count");
+  const emptyMessage = document.getElementById("article-empty");
 
-  if (searchInput) {
-    searchInput.addEventListener("input", function () {
-      const keyword = this.value.trim().normalize("NFKC").toLowerCase();
+  let articles = [];
+  let selectedCategory = "all";
 
-      articleCards.forEach(function (card) {
-        const text = card.textContent.normalize("NFKC").toLowerCase();
-        card.hidden = !text.includes(keyword);
-      });
+  function filterArticles() {
+    const keyword = (searchInput?.value || "")
+      .trim().normalize("NFKC").toLowerCase();
+
+    let visibleCount = 0;
+
+    articleGrid.querySelectorAll(".article-card").forEach(card => {
+      const text = card.textContent.normalize("NFKC").toLowerCase();
+      const category = card.dataset.category;
+
+      const visible =
+        text.includes(keyword) &&
+        (selectedCategory === "all" || category === selectedCategory);
+
+      card.hidden = !visible;
+      if (visible) visibleCount++;
     });
+
+    articleCount.textContent =
+      visibleCount + " 件の記事が見つかりました";
+
+    emptyMessage.hidden = visibleCount !== 0;
   }
+
+  function createArticleCard(article) {
+    const card = document.createElement("article");
+    card.className = "article-card";
+    card.dataset.category = article.category;
+
+    const category = document.createElement("span");
+    category.className = "article-category";
+    category.textContent = article.category;
+
+    const title = document.createElement("h2");
+    title.textContent = article.title;
+
+    const description = document.createElement("p");
+    description.textContent = article.description;
+
+    card.append(category, title, description);
+
+    if (article.status === "published" && article.url) {
+      const link = document.createElement("a");
+      link.className = "article-link";
+      link.href = article.url;
+      link.textContent = "記事を読む →";
+      card.appendChild(link);
+    } else {
+      const status = document.createElement("span");
+      status.textContent = "記事準備中";
+      card.appendChild(status);
+    }
+
+    return card;
+  }
+
+  async function loadArticles() {
+    try {
+      const response = await fetch("./articles.json");
+
+      if (!response.ok) {
+        throw new Error("記事データの取得に失敗しました");
+      }
+
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error("記事データの形式が正しくありません");
+      }
+
+      articles = data;
+
+      articleGrid.replaceChildren(
+        ...articles.map(createArticleCard)
+      );
+
+      filterArticles();
+
+    } catch (error) {
+      console.error(error);
+      articleCount.textContent = "記事を読み込めませんでした";
+      emptyMessage.hidden = true;
+    }
+  }
+
+  searchInput?.addEventListener("input", filterArticles);
+
+  filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      selectedCategory = button.dataset.category;
+
+      filterButtons.forEach(btn => {
+        const active = btn === button;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", String(active));
+      });
+
+      filterArticles();
+    });
+
+    button.setAttribute(
+      "aria-pressed",
+      String(button.classList.contains("active"))
+    );
+  });
+
+  loadArticles();
 </script>
+
+
 
 </body>
 </html>

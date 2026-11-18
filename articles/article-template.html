@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="森林・林業・GISに関する技術記事">
+  <title>記事タイトル | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    .blog-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      gap: 48px;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.9;
+    }
+
+    .blog-breadcrumb {
+      font-size: 0.85rem;
+      margin-bottom: 30px;
+    }
+
+    .blog-breadcrumb a,
+    .blog-article a {
+      color: #286647;
+    }
+
+    .blog-category {
+      color: #286647;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1.5;
+      margin: 14px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: 0.85rem;
+      margin-bottom: 40px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      margin: 55px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 15px;
+    }
+
+    .blog-article p {
+      margin-bottom: 22px;
+    }
+
+    .blog-article img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .blog-figure {
+      margin: 30px 0;
+    }
+
+    .blog-figure figcaption {
+      color: #687b70;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 24px;
+      height: fit-content;
+      position: sticky;
+      top: 30px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .blog-toc a:hover {
+      text-decoration: underline;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      color: #286647;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding-top: 35px;
+      }
+
+      .blog-toc {
+        grid-row: 1;
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark" aria-hidden="true">🌲</span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../index.html">ホーム</a>
+        <a class="active" href="index.html">特集・記事</a>
+        <a href="../map.html">地図・GIS</a>
+        <a href="../data/index.html">データ</a>
+        <a href="../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+
+    <article class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト">
+        <a href="../index.html">ホーム</a> /
+        <a href="index.html">記事一覧</a> /
+        記事タイトル
+      </nav>
+
+      <header>
+        <span class="blog-category">QGIS</span>
+        <h1 class="blog-title">記事タイトルを入力</h1>
+        <p class="blog-date">公開日：YYYY年MM月DD日</p>
+      </header>
+
+      <p class="blog-lead">
+        ここに記事の概要を書きます。
+        どんな内容を解説するのか簡潔に紹介します。
+      </p>
+
+      <section id="section1">
+        <h2>1. はじめに</h2>
+        <p>
+          ここに本文を入力します。
+          記事の背景や目的について説明します。
+        </p>
+      </section>
+
+      <section id="section2">
+        <h2>2. 操作方法・解説</h2>
+        <p>
+          ここに具体的な操作手順や技術的な解説を記載します。
+        </p>
+
+        <!-- 画像を追加する場合の例
+        <figure class="blog-figure">
+          <img src="../images/example.png" alt="操作画面の説明">
+          <figcaption>図1 操作画面</figcaption>
+        </figure>
+        -->
+      </section>
+
+      <section id="section3">
+        <h2>3. まとめ</h2>
+        <p>
+          記事の内容を振り返り、重要なポイントを整理します。
+        </p>
+      </section>
+
+      <a class="blog-back" href="index.html">
+        ← 記事一覧に戻る
+      </a>
+    </article>
+
+    <aside class="blog-toc" aria-label="記事の目次">
+      <h2>この記事の目次</h2>
+      <a href="#section1">1. はじめに</a>
+      <a href="#section2">2. 操作方法・解説</a>
+      <a href="#section3">3. まとめ</a>
+    </aside>
+
+  </main>
+
+  <script src="../script.js" defer></script>
+</body>
+</html>

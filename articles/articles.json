@@ -1,0 +1,31 @@
+
+[
+  
+{
+  "id": "qgis-basics",
+  "title": "QGISとは？誕生から現在までの歴史と特徴を解説",
+  "category": "QGIS",
+  "description": "2002年の開発開始から現在までのQGISの歴史、オープンソースGISとしての発展、森林・林業分野での活用を解説します。",
+  "date": "2026-11-18",
+  "url": "qgis-basics.html",
+  "status": "published"
+}
+  {
+    "id": "forest-road",
+    "title": "林道の基礎知識",
+    "category": "林業技術",
+    "description": "林道の役割や種類、森林管理における林道の重要性を整理します。",
+    "date": null,
+    "url": null,
+    "status": "draft"
+  },
+  {
+    "id": "forest-gis-data",
+    "title": "森林GISで利用できる地理空間データ",
+    "category": "GISデータ",
+    "description": "標高データ、航空写真、森林に関する地理空間データの特徴を紹介します。",
+    "date": null,
+    "url": null,
+    "status": "draft"
+  }
+]

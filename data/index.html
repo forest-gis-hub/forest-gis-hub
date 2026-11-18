@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>各種データ | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .data-page { padding: 75px 0 100px; }
+    .data-page h1 { font-family: "Zen Old Mincho", serif; font-size: 38px; color: #183b32; }
+    .dataset-card { background: white; border: 1px solid #dce4db; padding: 30px; margin-top: 25px; }
+    .dataset-card h2 { color: #244b39; margin-top: 0; }
+    .tile-url { background: #eef2ec; padding: 15px; overflow-wrap: anywhere; font-size: 13px; }
+    .copy-btn { margin-top: 12px; background: #183b32; color: white; padding: 12px 20px; border: 0; cursor: pointer; }
+    .data-note { color: #69776e; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../index.html">
+        <span><strong>FOREST GIS HUB</strong><small>森林・林業・地理空間情報</small></span>
+      </a>
+      <nav class="main-nav">
+        <a href="../index.html">ホーム</a>
+        <a class="active" href="index.html">各種データ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container data-page">
+    <p class="section-kicker">OPEN GEOSPATIAL DATA</p>
+    <h1>各種データ</h1>
+    <p>森林・林業に関するGISデータやXYZタイルを公開するページです。</p>
+
+    <section class="dataset-card">
+      <p class="section-kicker">XYZ TILE</p>
+      <h2>福岡県 国有林区域</h2>
+      <p>福岡県内の国有林区域を表示するXYZタイルです。</p>
+      <p>ズームレベル：9〜12</p>
+
+      <h3>XYZタイルURL</h3>
+      <div class="tile-url" id="tileUrl">公開準備中</div>
+      <button class="copy-btn" id="copyTile" disabled>URLをコピー（準備中）</button>
+
+      <p class="data-note">※ タイルの公開後にURLを掲載します。データの出典・利用条件も確認のうえ公開します。</p>
+    </section>
+
+    <section class="dataset-card">
+      <h2>QGISでの利用方法</h2>
+      <p>QGISのブラウザパネルで「XYZ Tiles」を右クリックし、「新しい接続」を選択します。公開後のURLを入力して接続してください。</p>
+    </section>
+
+    <section class="dataset-card">
+      <h2>その他のGISデータ</h2>
+      <p>今後、GeoJSONやGeoPackageなどのデータを追加予定です。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <span>© 2026 Forest GIS Hub</span>
+      <span>個人運営の情報サイトです。</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -117,11 +117,33 @@
           if (!/^[a-zA-Z0-9_/-]+\.html$/.test(a.url) || a.url.includes('..')) return;
           const card = document.createElement('article');
           card.className = 'article-card';
-          const thumb = document.createElement('div');
-          thumb.className = 'article-thumb ' + ['thumb-qgis','thumb-forest','thumb-photo'][i % 3];
-          const tag = document.createElement('span');
-          tag.textContent = a.category || 'ARTICLE';
-          thumb.append(tag);
+          
+const thumb = document.createElement('div');
+thumb.className = 'article-thumb ' +
+  ['thumb-qgis', 'thumb-forest', 'thumb-photo'][i % 3];
+
+// articles.jsonに画像が登録されていれば表示
+if (
+  typeof a.image === 'string' &&
+  /^images\/[\w.-]+\.(png|jpg|jpeg|webp)$/i.test(a.image)
+) {
+  const img = document.createElement('img');
+  img.src = 'articles/' + a.image;
+  img.alt = a.title + 'のサムネイル';
+  img.loading = 'lazy';
+
+  img.style.width = '100%';
+  img.style.height = '100%';
+  img.style.objectFit = 'cover';
+  img.style.display = 'block';
+
+  thumb.appendChild(img);
+} else {
+  const tag = document.createElement('span');
+  tag.textContent = a.category || 'ARTICLE';
+  thumb.appendChild(tag);
+}
+
           const meta = document.createElement('div');
           meta.className = 'article-meta';
           for (const value of [a.category || '記事', a.date]) {

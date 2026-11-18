@@ -178,7 +178,52 @@
   border-radius: 10px;
 }
 
-</style>
+/* 画像付き記事カード */
+.article-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.article-grid .article-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.article-thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(145deg, #d9e5dc, #61786c);
+  overflow: hidden;
+}
+
+.article-thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-card-body {
+  padding: 24px;
+}
+
+.article-grid .article-category {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 850px) {
+  .article-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .article-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -298,37 +343,56 @@ filterButtons.forEach(button => {
     emptyMessage.hidden = visibleCount !== 0;
   }
 
-  function createArticleCard(article) {
-    const card = document.createElement("article");
-    card.className = "article-card";
-    card.dataset.category = article.category;
+  
+function createArticleCard(article) {
+  const card = document.createElement("article");
+  card.className = "article-card";
+  card.dataset.category = article.category;
 
-    const category = document.createElement("span");
-    category.className = "article-category";
-    category.textContent = article.category;
+  // サムネイル
+  const thumbnail = document.createElement("div");
+  thumbnail.className = "article-thumbnail";
 
-    const title = document.createElement("h2");
-    title.textContent = article.title;
-
-    const description = document.createElement("p");
-    description.textContent = article.description;
-
-    card.append(category, title, description);
-
-    if (article.status === "published" && article.url) {
-      const link = document.createElement("a");
-      link.className = "article-link";
-      link.href = article.url;
-      link.textContent = "記事を読む →";
-      card.appendChild(link);
-    } else {
-      const status = document.createElement("span");
-      status.textContent = "記事準備中";
-      card.appendChild(status);
-    }
-
-    return card;
+  if (typeof article.image === "string" &&
+      /^images\/[\w.-]+\.(png|jpg|jpeg|webp)$/i.test(article.image)) {
+    const img = document.createElement("img");
+    img.src = article.image;
+    img.alt = article.title + "のサムネイル";
+    img.loading = "lazy";
+    thumbnail.appendChild(img);
   }
+
+  const body = document.createElement("div");
+  body.className = "article-card-body";
+
+  const category = document.createElement("span");
+  category.className = "article-category";
+  category.textContent = article.category;
+
+  const title = document.createElement("h2");
+  title.textContent = article.title;
+
+  const description = document.createElement("p");
+  description.textContent = article.description;
+
+  body.append(category, title, description);
+
+  if (article.status === "published" && article.url) {
+    const link = document.createElement("a");
+    link.className = "article-link";
+    link.href = article.url;
+    link.textContent = "記事を読む →";
+    body.appendChild(link);
+  } else {
+    const status = document.createElement("span");
+    status.textContent = "記事準備中";
+    body.appendChild(status);
+  }
+
+  card.append(thumbnail, body);
+  return card;
+}
+
 
   async function loadArticles() {
     try {

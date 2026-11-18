@@ -1,15 +1,15 @@
 
 [
-  
-{
-  "id": "qgis-basics",
-  "title": "QGISとは？誕生から現在までの歴史と特徴を解説",
-  "category": "QGIS",
-  "description": "2002年の開発開始から現在までのQGISの歴史、オープンソースGISとしての発展、森林・林業分野での活用を解説します。",
-  "date": "2026-11-18",
-  "url": "qgis-basics.html",
-  "status": "published"
-},
+  {
+    "id": "qgis-basics",
+    "title": "QGISとは？誕生から現在までの歴史と特徴を解説",
+    "category": "QGIS",
+    "description": "2002年の開発開始から現在までのQGISの歴史、オープンソースGISとしての発展、森林・林業分野での活用を解説します。",
+    "date": "2026-11-18",
+    "url": "qgis-basics.html",
+    "image": "images/qgis-thumbnail.png",
+    "status": "published"
+  },
   {
     "id": "forest-road",
     "title": "林道の基礎知識",

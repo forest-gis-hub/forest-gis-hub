@@ -254,7 +254,25 @@
   const emptyMessage = document.getElementById("article-empty");
 
   let articles = [];
-  let selectedCategory = "all";
+ 
+const params = new URLSearchParams(window.location.search);
+const requestedCategory = params.get("category");
+
+const availableCategories = Array.from(
+  filterButtons,
+  button => button.dataset.category
+);
+
+let selectedCategory = availableCategories.includes(requestedCategory)
+  ? requestedCategory
+  : "all";
+
+filterButtons.forEach(button => {
+  const active = button.dataset.category === selectedCategory;
+  button.classList.toggle("active", active);
+  button.setAttribute("aria-pressed", String(active));
+});
+
 
   function filterArticles() {
     const keyword = (searchInput?.value || "")

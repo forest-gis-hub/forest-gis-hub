@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>地図ビューア | Forest GIS Hub</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<style>
+:root{font-family:system-ui,-apple-system,"Yu Gothic",sans-serif;color:#1c342a}*{box-sizing:border-box}body{margin:0;background:#f4f7f4}header{background:#163d2c;color:white;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}header a{color:white;text-decoration:none}h1{font-size:1.15rem;margin:0}.layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}aside{padding:20px;background:white;border-right:1px solid #d9e2da}aside h2{font-size:1rem;margin:0 0 16px}fieldset{border:0;padding:0;margin:0 0 24px}legend{font-weight:700;margin-bottom:10px}label{display:block;margin:10px 0;font-size:.94rem}input{accent-color:#276a46}input[type=range]{width:100%}#map{min-height:550px;height:calc(100vh - 64px)}.note{font-size:.8rem;line-height:1.7;color:#54665a}.status{padding:10px;background:#f2f6f2;border-radius:6px;font-size:.85rem}.leaflet-control-attribution{font-size:11px!important}@media(max-width:700px){.layout{display:flex;flex-direction:column}aside{padding:14px}#map{height:70vh;min-height:450px}}
+/* 地図をサイドバーの領域へはみ出させない */
+.layout > main{min-width:0;position:relative;overflow:hidden}
+#map{width:100%;position:relative;z-index:0;overflow:hidden}
+#map .leaflet-pane img{max-width:none!important;max-height:none!important}
+</style>
+</head>
+<body>
+<header><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1><a href="./index.html">← トップへ戻る</a></header>
+<div class="layout"><aside>
+<h2>地図レイヤー</h2>
+<fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>
+<fieldset><legend>重ね合わせ</legend><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><label for="opacity">透明度（国有林レイヤー）</label><input id="opacity" type="range" min="0" max="100" value="75"></fieldset>
+<p class="status" id="status">福岡県の国有林野レイヤーを表示しています（ズーム9～12のタイルを利用）。</p>
+<p class="note">背景地図：国土地理院（地理院タイル）。国有林野：国土交通省「国土数値情報（国有林野データ A45）」を加工してXYZタイル化。対象は福岡県のみです。<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">元データ・利用条件</a>／<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>。※元データの版・加工内容は公開前に再確認してください。</p>
+</aside><main><div id="map" aria-label="福岡県周辺の地図"></div></main></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const gsiCredit='出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">国土地理院（地理院タイル）</a>';
+const baseLayers={
+ pale:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{attribution:gsiCredit,maxZoom:18}),
+ std:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{attribution:gsiCredit,maxZoom:18}),
+ photo:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{attribution:gsiCredit,maxZoom:18})
+};
+const map=L.map('map',{center:[33.59,130.40],zoom:10,layers:[baseLayers.pale]});
+let activeBase=baseLayers.pale;
+document.querySelectorAll('input[name="base"]').forEach(el=>el.addEventListener('change',()=>{map.removeLayer(activeBase);activeBase=baseLayers[el.value];activeBase.addTo(map)}));
+// 国有林野の透過PNG（XYZ形式）。ズーム12より上はズーム12の画像を拡大表示。
+const forestCredit='国有林野：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">国土交通省 国土数値情報（A45）</a>（加工：Forest GIS Hub、<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>）';
+const forest=L.tileLayer('./tiles/{z}/{x}/{y}.png',{
+  minZoom:9,maxNativeZoom:12,maxZoom:18,opacity:0.75,
+  attribution:forestCredit,errorTileUrl:''
+});
+forest.addTo(map);
+const toggle=document.getElementById('forest-toggle');
+const opacity=document.getElementById('opacity');
+const status=document.getElementById('status');
+toggle.addEventListener('change',()=>{
+  if(toggle.checked){forest.addTo(map)}else{map.removeLayer(forest)}
+  status.textContent=toggle.checked?'福岡県の国有林野レイヤーを表示しています。':'国有林野レイヤーを非表示にしています。';
+});
+opacity.addEventListener('input',()=>forest.setOpacity(Number(opacity.value)/100));
+// 地図サイズの再計算（表示崩れ防止）
+window.addEventListener('load',()=>map.invalidateSize());
+window.addEventListener('resize',()=>map.invalidateSize());
+</script>
+</body></html>

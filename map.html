@@ -13,6 +13,19 @@
 .layout > main{min-width:0;position:relative;overflow:hidden}
 #map{width:100%;position:relative;z-index:0;overflow:hidden}
 #map .leaflet-pane img{max-width:none!important;max-height:none!important}
+/* Measurement controls: contained above the map, not the sidebar */
+#map.area-drawing, #map.area-drawing .leaflet-container{cursor:crosshair!important;touch-action:none}
+.measure-panel{position:absolute;top:12px;right:12px;z-index:1000;width:min(290px,calc(100% - 24px));background:#fff;border:1px solid #dce5dd;border-radius:12px;box-shadow:0 4px 20px #10291d26;padding:12px;color:#1c342a}
+.measure-title{font-size:13px;font-weight:700;margin:0 0 9px}.measure-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.measure-tools button,.measure-actions button{border:1px solid #cddbd0;border-radius:7px;background:white;color:#244534;padding:8px 5px;cursor:pointer;font-size:12px}.measure-tools button[aria-pressed=true]{background:#1d583b;color:white;border-color:#1d583b}.measure-result{margin:10px 0 5px;font-size:14px;font-weight:700;min-height:20px;overflow-wrap:anywhere}.measure-hint{font-size:11px;color:#65766b;margin:0 0 8px;line-height:1.5}.measure-actions{display:flex;gap:5px;flex-wrap:wrap}.measure-actions button{padding:6px 10px}.measure-actions button:disabled{opacity:.4;cursor:default}.measure-actions .primary{background:#e7f1e9}.measure-panel button:focus-visible{outline:2px solid #276a46;outline-offset:2px}#map.measuring{cursor:crosshair}.leaflet-container.measuring{cursor:crosshair!important}@media(max-width:700px){.measure-panel{top:8px;right:8px;width:min(270px,calc(100% - 16px));padding:9px}}
+/* Collapsible measurement panel */
+.measure-panel{padding:0;width:min(300px,calc(100% - 24px));overflow:hidden}
+.measure-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:11px 13px;background:#fff;border:0;color:#1c342a;font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:left}
+.measure-toggle:hover{background:#f3f7f3}
+.measure-toggle .chevron{transition:transform .15s ease}
+.measure-toggle[aria-expanded=true] .chevron{transform:rotate(180deg)}
+.measure-body{padding:0 12px 12px}
+.measure-body[hidden]{display:none!important}
+.measure-panel .measure-title{margin:0}
 </style>
 </head>
 <body>
@@ -21,9 +34,18 @@
 <h2>地図レイヤー</h2>
 <fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>
 <fieldset><legend>重ね合わせ</legend><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><label for="opacity">透明度（国有林レイヤー）</label><input id="opacity" type="range" min="0" max="100" value="75"></fieldset>
-<p class="status" id="status">福岡県の国有林野レイヤーを表示しています（ズーム9～12のタイルを利用）。</p>
-<p class="note">背景地図：国土地理院（地理院タイル）。国有林野：国土交通省「国土数値情報（国有林野データ A45）」を加工してXYZタイル化。対象は福岡県のみです。<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">元データ・利用条件</a>／<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>。※元データの版・加工内容は公開前に再確認してください。</p>
-</aside><main><div id="map" aria-label="福岡県周辺の地図"></div></main></div>
+
+<p class="note">背景地図：国土地理院（地理院タイル）。国有林野：国土交通省「国土数値情報（国有林野データ A45）」を加工してXYZタイル化。対象は福岡県のみです。<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">元データ・利用条件</a>／<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>。</p>
+</aside><main><div id="map" aria-label="福岡県周辺の地図"></div>
+<section class="measure-panel" aria-label="地図計測ツール">
+<button type="button" class="measure-toggle" id="measure-toggle" aria-expanded="false" aria-controls="measure-body"><span>📏 計測ツール</span><span class="chevron" aria-hidden="true">⌄</span></button>
+<div class="measure-body" id="measure-body" hidden>
+<div class="measure-tools"><button type="button" data-tool="distance" aria-pressed="false">↗ 距離</button><button type="button" data-tool="area" aria-pressed="false">⬡ 多角形</button><button type="button" data-tool="rectangle" aria-pressed="false">▭ 四角形</button><button type="button" data-tool="coordinate" aria-pressed="false">⌖ 座標</button></div>
+<div class="measure-result" id="measure-result" aria-live="polite">ツールを選択</div>
+<p class="measure-hint" id="measure-hint">距離・多角形はクリック、四角形はドラッグで計測。</p>
+<div class="measure-actions"><button type="button" id="measure-undo" disabled>1点戻す</button><button type="button" id="measure-finish" class="primary" disabled>確定</button><button type="button" id="measure-clear">クリア</button><button type="button" id="measure-copy" hidden>座標をコピー</button></div>
+</div>
+</section></main></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const gsiCredit='出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">国土地理院（地理院タイル）</a>';
@@ -37,19 +59,85 @@ let activeBase=baseLayers.pale;
 document.querySelectorAll('input[name="base"]').forEach(el=>el.addEventListener('change',()=>{map.removeLayer(activeBase);activeBase=baseLayers[el.value];activeBase.addTo(map)}));
 // 国有林野の透過PNG（XYZ形式）。ズーム12より上はズーム12の画像を拡大表示。
 const forestCredit='国有林野：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">国土交通省 国土数値情報（A45）</a>（加工：Forest GIS Hub、<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>）';
+map.createPane('forestPane');
+map.getPane('forestPane').style.zIndex=450;
 const forest=L.tileLayer('./tiles/{z}/{x}/{y}.png',{
+  pane:'forestPane',
   minZoom:9,maxNativeZoom:12,maxZoom:18,opacity:0.75,
   attribution:forestCredit,errorTileUrl:''
 });
 forest.addTo(map);
 const toggle=document.getElementById('forest-toggle');
 const opacity=document.getElementById('opacity');
-const status=document.getElementById('status');
+
 toggle.addEventListener('change',()=>{
   if(toggle.checked){forest.addTo(map)}else{map.removeLayer(forest)}
-  status.textContent=toggle.checked?'福岡県の国有林野レイヤーを表示しています。':'国有林野レイヤーを非表示にしています。';
+
 });
 opacity.addEventListener('input',()=>forest.setOpacity(Number(opacity.value)/100));
+
+// Built-in measurement tools (no additional libraries required).
+const measureLayer=L.layerGroup().addTo(map);
+const measureButtons=[...document.querySelectorAll('[data-tool]')];
+const resultEl=document.getElementById('measure-result');
+const hintEl=document.getElementById('measure-hint');
+const undoBtn=document.getElementById('measure-undo');
+const finishBtn=document.getElementById('measure-finish');
+const clearBtn=document.getElementById('measure-clear');
+const copyBtn=document.getElementById('measure-copy');
+let tool=null,points=[],finished=false,copyText='';
+let dragStart=null,dragRect=null,dragActive=false;
+function dist(a,b){return a.distanceTo(b)}
+function lengthMeters(ps){let n=0;for(let i=1;i<ps.length;i++)n+=dist(ps[i-1],ps[i]);return n}
+function formatLength(m){return m>=1000?(m/1000).toLocaleString('ja-JP',{maximumFractionDigits:3})+' km':m.toLocaleString('ja-JP',{maximumFractionDigits:1})+' m'}
+// Spherical polygon area (WGS84 mean Earth radius); approximate, not survey-grade.
+function areaMeters(ps){if(ps.length<3)return 0;const R=6371008.8,rad=Math.PI/180;let sum=0;for(let i=0;i<ps.length;i++){const a=ps[i],b=ps[(i+1)%ps.length];let dl=(b.lng-a.lng)*rad;if(dl>Math.PI)dl-=2*Math.PI;if(dl< -Math.PI)dl+=2*Math.PI;sum+=dl*(2+Math.sin(a.lat*rad)+Math.sin(b.lat*rad))}return Math.abs(sum*R*R/2)}
+function formatArea(a){if(a>=1000000)return (a/1000000).toLocaleString('ja-JP',{maximumFractionDigits:3})+' km²';if(a>=10000)return (a/10000).toLocaleString('ja-JP',{maximumFractionDigits:3})+' ha';return a.toLocaleString('ja-JP',{maximumFractionDigits:1})+' m²'}
+function redraw(){measureLayer.clearLayers();if(!points.length)return;points.forEach(p=>L.circleMarker(p,{radius:5,color:'#14533a',weight:2,fillColor:'#fff',fillOpacity:1,interactive:false}).addTo(measureLayer));if(points.length>=2)L.polyline(points,{color:'#e06b38',weight:3,interactive:false}).addTo(measureLayer);if((tool==='area'||tool==='rectangle')&&points.length>=3)L.polygon(points,{color:'#e06b38',weight:2,fillColor:'#e6a362',fillOpacity:.22,interactive:false}).addTo(measureLayer)}
+function refresh(){undoBtn.disabled=finished||!points.length||tool==='coordinate';finishBtn.disabled=finished||!(tool==='distance'&&points.length>=2||(tool==='area'||tool==='rectangle')&&points.length>=3);copyBtn.hidden=tool!=='coordinate'||!copyText;
+if(!tool){resultEl.textContent='ツールを選択';hintEl.textContent='距離・多角形はクリック、四角形はドラッグで計測。'}
+else if(tool==='distance'){resultEl.textContent=points.length>=2?formatLength(lengthMeters(points)):'距離：地点を指定';hintEl.textContent=finished?'計測完了。クリアすると再計測できます。':'地図をクリックして地点を追加。確定で終了。'}
+else if(tool==='area'){resultEl.textContent=points.length>=3?formatArea(areaMeters(points)):'面積：頂点を指定';hintEl.textContent=finished?'計測完了。クリアで再計測できます。':'クリックで頂点を追加。ダブルクリックまたは確定で終了。'}
+else if(tool==='rectangle'){resultEl.textContent=points.length>=3?formatArea(areaMeters(points)):'四角形：ドラッグで指定';hintEl.textContent=finished?'計測完了。再びドラッグで描き直せます。':'地図をドラッグして四角形を描きます。'}
+else{resultEl.textContent=copyText||'座標：地点を指定';hintEl.textContent='地図をクリックすると緯度・経度（WGS84）を取得します。'}}
+function clearMeasure(){points=[];finished=false;copyText='';dragStart=null;dragActive=false;dragRect=null;measureLayer.clearLayers();refresh()}
+function setTool(next){tool=tool===next?null:next;clearMeasure();measureButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tool===tool)));map.getContainer().classList.toggle('measuring',!!tool);map.getContainer().classList.toggle('area-drawing',tool==='rectangle');if(tool==='rectangle'){map.dragging.disable()}else{map.dragging.enable()}if(tool==='area'||tool==='rectangle'){map.doubleClickZoom.disable()}else{map.doubleClickZoom.enable()}}
+measureButtons.forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+// 初期状態は折りたたみ。閉じる際は描画結果を残し、地図操作だけ通常に戻す。
+const measureToggle=document.getElementById('measure-toggle');
+const measureBody=document.getElementById('measure-body');
+measureToggle.addEventListener('click',()=>{
+  const open=measureToggle.getAttribute('aria-expanded')!=='true';
+  measureToggle.setAttribute('aria-expanded',String(open));
+  measureBody.hidden=!open;
+  if(!open){
+    dragActive=false;
+    tool=null;
+    measureButtons.forEach(b=>b.setAttribute('aria-pressed','false'));
+    map.getContainer().classList.remove('measuring','area-drawing');
+    map.dragging.enable();
+    map.doubleClickZoom.enable();
+    // 結果表示と描画は残し、次のツール選択時に初期化する。
+  }
+});
+map.on('click',e=>{if(!tool||tool==='rectangle')return;if(tool==='coordinate'){copyText=e.latlng.lat.toFixed(6)+', '+e.latlng.lng.toFixed(6);points=[e.latlng];finished=false}else if(!finished){points.push(e.latlng)}redraw();refresh()});
+// 多角形はダブルクリックでも確定できる。
+map.on('dblclick',e=>{if(tool!=='area'||finished)return;if(points.length>=2&&points[points.length-1].distanceTo(points[points.length-2])<0.1)points.pop();if(points.length>=3){finished=true;redraw();refresh()}});
+// 四角形モード：ドラッグで矩形を指定。マウスとタッチの両方に対応。
+const mapEl=map.getContainer();
+function eventLatLng(e){const rect=mapEl.getBoundingClientRect();return map.containerPointToLatLng([e.clientX-rect.left,e.clientY-rect.top])}
+function rectanglePoints(a,b){return [L.latLng(a.lat,a.lng),L.latLng(a.lat,b.lng),L.latLng(b.lat,b.lng),L.latLng(b.lat,a.lng)]}
+mapEl.addEventListener('pointerdown',e=>{if(tool!=='rectangle'||e.button!==0||e.target.closest('.leaflet-control'))return;dragStart=eventLatLng(e);dragActive=true;finished=false;points=[];measureLayer.clearLayers();dragRect=L.rectangle(L.latLngBounds(dragStart,dragStart),{color:'#e06b38',weight:2,fillColor:'#e6a362',fillOpacity:.22,interactive:false}).addTo(measureLayer);mapEl.setPointerCapture(e.pointerId);e.preventDefault()});
+mapEl.addEventListener('pointermove',e=>{if(!dragActive||tool!=='rectangle')return;dragRect.setBounds(L.latLngBounds(dragStart,eventLatLng(e)));e.preventDefault()});
+function finishDrag(e){if(!dragActive)return;const end=eventLatLng(e);dragActive=false;if(mapEl.hasPointerCapture(e.pointerId))mapEl.releasePointerCapture(e.pointerId);if(Math.abs(e.clientX-(map.latLngToContainerPoint(dragStart).x+mapEl.getBoundingClientRect().left))<4&&Math.abs(e.clientY-(map.latLngToContainerPoint(dragStart).y+mapEl.getBoundingClientRect().top))<4){measureLayer.clearLayers();points=[];refresh();return}points=rectanglePoints(dragStart,end);finished=true;redraw();refresh();e.preventDefault()}
+mapEl.addEventListener('pointerup',finishDrag);mapEl.addEventListener('pointercancel',()=>{dragActive=false;dragStart=null});
+undoBtn.addEventListener('click',()=>{if(!finished&&points.length){points.pop();redraw();refresh()}});
+finishBtn.addEventListener('click',()=>{if(!finishBtn.disabled){finished=true;refresh()}});
+clearBtn.addEventListener('click',clearMeasure);
+copyBtn.addEventListener('click',async()=>{if(!copyText)return;try{await navigator.clipboard.writeText(copyText);hintEl.textContent='座標をコピーしました。'}catch(e){hintEl.textContent='コピーできませんでした。表示された座標を選択してコピーしてください。'}});
+// Escape exits measurement mode. Keep normal Leaflet navigation otherwise.
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&tool)setTool(tool)});
+
 // 地図サイズの再計算（表示崩れ防止）
 window.addEventListener('load',()=>map.invalidateSize());
 window.addEventListener('resize',()=>map.invalidateSize());

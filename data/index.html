@@ -41,8 +41,13 @@
       <p>ズームレベル：9〜12</p>
 
       <h3>XYZタイルURL</h3>
-      <div class="tile-url" id="tileUrl">公開準備中</div>
-      <button class="copy-btn" id="copyTile" disabled>URLをコピー（準備中）</button>
+      
+<div class="tile-url" id="tileUrl">https://forest-gis-hub.github.io/forest-gis-hub/tiles/{z}/{x}/{y}.png</div>
+
+<button class="copy-btn" type="button" onclick="navigator.clipboard.writeText(document.getElementById('tileUrl').textContent).then(() => alert('URLをコピーしました！'))">
+  URLをコピー
+</button>
+
 
       <p class="data-note">※ タイルの公開後にURLを掲載します。データの出典・利用条件も確認のうえ公開します。</p>
     </section>

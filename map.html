@@ -34,6 +34,26 @@
 .coordinate-display{background:#fffffff0;padding:5px 9px;border-radius:5px;box-shadow:0 1px 5px #0002;font-size:12px;color:#183d2b}
 #map:fullscreen{width:100vw!important;height:100vh!important;min-height:0!important;background:#fff}
 #map:fullscreen .leaflet-control-container{display:block}
+
+/* Forest GIS Hub: thematic layers */
+.layer-card{border:1px solid #dce6de;border-radius:9px;padding:11px;margin:8px 0 15px;background:#fbfdfb}
+.layer-card label{margin:3px 0 9px}.layer-card .layer-range{margin:5px 0 0}.layer-legend{display:flex;align-items:center;gap:8px;font-size:12px;margin:8px 0;color:#43594a}.legend-swatch{width:20px;height:13px;background:#e6a362;border:1px solid #b98751;border-radius:2px;flex:none}
+.layer-card details{margin-top:9px;font-size:12px;color:#4b6253}.layer-card summary{cursor:pointer;font-weight:600}.layer-card details p{line-height:1.6;margin:7px 0 0}.layer-card a{color:#205c42}.layer-help{font-size:12px;color:#586c60;line-height:1.6}.layer-card input[type=range]{margin-top:4px}
+.opacity-details{margin-top:7px!important}.opacity-details summary{font-weight:500!important;color:#365e47;list-style:revert;cursor:pointer}.opacity-control{padding:10px 3px 4px}.opacity-control label{display:block;margin:0 0 8px!important}.opacity-control input[type=range]{display:block;width:100%;height:28px;cursor:pointer;accent-color:#276a46}.opacity-control input[type=range]::-webkit-slider-thumb{width:20px;height:20px}
+
+/* Compact layer selector and one shared opacity slider */
+.simple-layer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 0;border-bottom:1px solid #edf1ed}
+.simple-layer label{margin:0;flex:1;font-size:13px}
+.select-opacity{flex:none;border:1px solid #d4e0d6;background:#fff;border-radius:6px;color:#365b44;cursor:pointer;padding:5px 9px;font-size:15px}
+.select-opacity[aria-pressed="true"]{background:#dfeee3;border-color:#4a8560}
+.shared-opacity{background:#f1f6f1;border:1px solid #dce6de;border-radius:9px;padding:12px;margin:0 0 15px}
+.opacity-head{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.shared-opacity label{font-size:12px;color:#4c6656;margin:7px 0 2px}
+.shared-opacity input{width:100%;height:28px;cursor:pointer}
+.leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:min(65vw,520px);white-space:normal;line-height:1.4;padding:4px 7px;background:#fffffff0}
+.leaflet-bottom.leaflet-right .coordinate-display{margin-bottom:25px}
+@media(min-width:701px){html,body{height:100%;overflow:hidden}.layout{height:calc(100dvh - 64px);min-height:0}.layout>aside{min-height:0;overflow-y:auto;overscroll-behavior:contain}.layout>main{min-height:0}#map{height:100%;min-height:0}}
+@media(max-width:700px){.leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:75vw;font-size:10px!important}}
 </style>
 </head>
 <body>
@@ -41,9 +61,14 @@
 <div class="layout"><aside>
 <h2>地図レイヤー</h2>
 <fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>
-<fieldset><legend>重ね合わせ</legend><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><label for="opacity">透明度（国有林レイヤー）</label><input id="opacity" type="range" min="0" max="100" value="75"></fieldset>
-
-<p class="note">背景地図：国土地理院（地理院タイル）。国有林野：国土交通省「国土数値情報（国有林野データ A45）」を加工してXYZタイル化。対象は福岡県のみです。<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">元データ・利用条件</a>／<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>。</p>
+<fieldset><legend>森林情報</legend><div class="simple-layer"><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><button class="select-opacity" type="button" data-select-layer="forest" aria-label="国有林野の不透明度を調整" title="不透明度を調整">⚙</button></div></fieldset>
+<fieldset><legend>地形情報</legend>
+<div class="simple-layer"><label><input id="slope-toggle" type="checkbox"> 傾斜量図</label><button class="select-opacity" type="button" data-select-layer="slope" aria-label="傾斜量図の不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="hillshade-toggle" type="checkbox"> 陰影起伏図</label><button class="select-opacity" type="button" data-select-layer="hillshade" aria-label="陰影起伏図の不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="redrelief-toggle" type="checkbox"> 赤色立体地図</label><button class="select-opacity" type="button" data-select-layer="redrelief" aria-label="赤色立体地図の不透明度を調整">⚙</button></div>
+</fieldset>
+<section class="shared-opacity" aria-label="選択したレイヤの不透明度"><div class="opacity-head"><strong>不透明度調整</strong><output id="shared-opacity-value">75%</output></div><label id="selected-layer-name" for="shared-opacity-range">福岡県の国有林野</label><input id="shared-opacity-range" type="range" min="0" max="100" value="75"></section>
+<p class="layer-help">⚙で調整対象を選択します。地図左下には表示中のデータの出典が自動表示されます。</p>
 </aside><main><div id="map" aria-label="福岡県周辺の地図"></div>
 <section class="measure-panel" aria-label="地図計測ツール">
 <button type="button" class="measure-toggle" id="measure-toggle" aria-expanded="false" aria-controls="measure-body"><span>📏 計測ツール</span><span class="chevron" aria-hidden="true">⌄</span></button>
@@ -109,13 +134,60 @@ const forest=L.tileLayer('./tiles/{z}/{x}/{y}.png',{
 });
 forest.addTo(map);
 const toggle=document.getElementById('forest-toggle');
-const opacity=document.getElementById('opacity');
+
 
 toggle.addEventListener('change',()=>{
   if(toggle.checked){forest.addTo(map)}else{map.removeLayer(forest)}
 
 });
-opacity.addEventListener('input',()=>forest.setOpacity(Number(opacity.value)/100));
+
+// 地形タイルは背景地図の上・国有林野の下に表示する。
+map.createPane('terrainPane');
+map.getPane('terrainPane').style.zIndex=420;
+const terrainCredit='出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">国土地理院（地理院タイル）</a>';
+const terrainLayers={
+ slope:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/slopemap/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:3,maxNativeZoom:15,maxZoom:18,opacity:.65,attribution:terrainCredit}),
+ hillshade:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:2,maxNativeZoom:16,maxZoom:18,opacity:.55,attribution:terrainCredit}),
+ redrelief:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/sekishoku/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:2,maxNativeZoom:14,maxZoom:18,opacity:.65,attribution:terrainCredit})
+};
+for(const [key,layer] of Object.entries(terrainLayers)){
+ const toggleEl=document.getElementById(key+'-toggle');
+ toggleEl.addEventListener('change',()=>{if(toggleEl.checked)layer.addTo(map);else map.removeLayer(layer)});
+}
+
+
+// Shared opacity control: exactly one slider for the selected overlay.
+const layerSettings={
+ forest:{name:'福岡県の国有林野',layer:forest,opacity:75},
+ slope:{name:'傾斜量図',layer:terrainLayers.slope,opacity:65},
+ hillshade:{name:'陰影起伏図',layer:terrainLayers.hillshade,opacity:55},
+ redrelief:{name:'赤色立体地図',layer:terrainLayers.redrelief,opacity:65}
+};
+let selectedOpacityLayer='forest';
+const sharedRange=document.getElementById('shared-opacity-range');
+const sharedValue=document.getElementById('shared-opacity-value');
+const selectedName=document.getElementById('selected-layer-name');
+const selectButtons=[...document.querySelectorAll('[data-select-layer]')];
+function selectOpacityLayer(key){
+ selectedOpacityLayer=key;
+ const item=layerSettings[key];
+ selectedName.textContent=item.name;
+ sharedRange.value=item.opacity;
+ sharedValue.textContent=item.opacity+'%';
+ selectButtons.forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.selectLayer===key)));
+}
+selectButtons.forEach(btn=>btn.addEventListener('click',()=>selectOpacityLayer(btn.dataset.selectLayer)));
+sharedRange.addEventListener('input',()=>{
+ const item=layerSettings[selectedOpacityLayer];
+ item.opacity=Number(sharedRange.value);
+ item.layer.setOpacity(item.opacity/100);
+ sharedValue.textContent=item.opacity+'%';
+});
+selectOpacityLayer('forest');
+// Attribution is built into Leaflet and follows the currently displayed layers.
+// Move it to bottom left; the coordinate control is moved to bottom right.
+map.attributionControl.setPosition('bottomleft');
+coordinateControl.setPosition('bottomright');
 
 // Built-in measurement tools (no additional libraries required).
 const measureLayer=L.layerGroup().addTo(map);

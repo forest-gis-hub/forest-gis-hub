@@ -72,6 +72,8 @@
 header{padding:8px 14px;min-height:48px;gap:8px}
 header h1{font-size:.94rem;line-height:1.3}
 header .back-link{font-size:.78rem;white-space:nowrap}
+.map-nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.map-nav a{color:#e4efe8;text-decoration:none;font-size:.78rem;white-space:nowrap}.map-nav a[aria-current="page"]{font-weight:700;border-bottom:2px solid #a4d3b3;padding-bottom:3px}.map-nav a:hover{text-decoration:underline}
+@media(max-width:700px){.map-nav{gap:8px}.map-nav a{font-size:.69rem}header h1 span{display:none}}
 .header-start{display:flex;align-items:center;gap:10px;min-width:0}
 .sidebar-toggle{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.4);border-radius:6px;color:#fff;font:inherit;font-size:.78rem;white-space:nowrap;padding:6px 9px;cursor:pointer}
 .sidebar-toggle:hover,.sidebar-toggle:focus-visible{background:rgba(255,255,255,.25)}
@@ -84,7 +86,7 @@ header .back-link{font-size:.78rem;white-space:nowrap}
 </style>
 </head>
 <body>
-<header><div class="header-start"><button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="layer-sidebar" aria-label="レイヤパネルを閉じる" title="レイヤパネルの開閉">☰ <span id="sidebar-toggle-label">レイヤ</span></button><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1></div><a class="back-link" href="./index.html">← トップへ戻る</a></header>
+<header><div class="header-start"><button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="layer-sidebar" aria-label="レイヤパネルを閉じる" title="レイヤパネルの開閉">☰ <span id="sidebar-toggle-label">レイヤ</span></button><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1></div><nav class="map-nav" aria-label="メインナビゲーション"><a href="./index.html">Home</a><a href="./map.html" aria-current="page">Map</a><a href="./library.html">Library</a><a href="./articles/index.html">Journal</a></nav></header>
 <div class="layout" id="map-layout"><aside id="layer-sidebar">
 <h2>地図レイヤー</h2>
 <fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>

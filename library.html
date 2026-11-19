@@ -11,12 +11,12 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><a class="brand" href="./index.html">Forest GIS Hub</a><nav class="header-nav" aria-label="メインナビゲーション"><a href="./index.html">ホーム</a><a href="./map.html">Map</a><a href="./library.html" aria-current="page">Library</a><a href="./index.html">Journal</a></nav></div></header>
+<header><div class="header-inner"><a class="brand" href="./index.html">Forest GIS Hub</a><nav class="header-nav" aria-label="メインナビゲーション"><a href="./index.html">Home</a><a href="./map.html">Map</a><a href="./library.html" aria-current="page">Library</a><a href="./articles/index.html">Journal</a></nav></div></header>
 <section class="hero"><div class="hero-inner"><div class="eyebrow">FOREST GIS LIBRARY</div><h1>森林・GISの情報を、探しやすく。</h1><p>森林管理、地形、地理空間データ、GISソフトウェア。信頼できる公開情報への入口を、用途別にまとめました。</p></div></section>
 <main class="container"><p class="intro">公的機関や開発元が提供するサイトを中心に掲載しています。キーワード検索やカテゴリで、目的の情報を探せます。</p>
 <section class="search-panel" aria-label="リンクを検索"><label class="search-label" for="search">サイト名・キーワードで検索</label><input id="search" class="search" type="search" placeholder="例：林道、標高、航空写真、QGIS" autocomplete="off"><div class="categories" id="categories" role="group" aria-label="カテゴリで絞り込み"></div></section>
 <div class="result-bar"><h2>掲載サイト</h2><span id="count" class="result-count" role="status" aria-live="polite"></span></div><div id="cards" class="cards"></div><div id="empty" class="empty" hidden>該当するサイトが見つかりませんでした。検索語やカテゴリを変更してください。</div>
-<p class="note">※ 外部リンクは各提供元のWebサイトへ移動します。掲載情報やURLは変更される場合があります。データの利用・再配布・地図への組み込みは、各提供元の利用規約を確認してください。掲載は推奨・提携を意味しません。</p></main>
+<p class="note">※ 外部リンクは各提供元のWebサイトへ移動します。掲載情報やURLは変更される場合があります。2026年11月19日にリンク先を再点検しました（一部は動作未確認）。データの利用・再配布・地図への組み込みは、各提供元の利用規約を確認してください。掲載は推奨・提携を意味しません。</p></main>
 <footer>© Forest GIS Hub <a href="./index.html">トップページへ</a></footer>
 <script>
 'use strict';
@@ -25,17 +25,17 @@
 const links = [
  {name:'地理院地図',org:'国土地理院',category:'地図・航空写真',description:'地形図、空中写真、地形表現などをブラウザで閲覧できる地図サービス。',url:'https://maps.gsi.go.jp/',keywords:'地形図 標高 傾斜 航空写真'},
  {name:'地理院タイル一覧',org:'国土地理院',category:'GISデータ',description:'地理院地図で使われる各種タイルの仕様や提供情報を確認できます。',url:'https://maps.gsi.go.jp/development/ichiran.html',keywords:'XYZタイル 地図 API'},
- {name:'基盤地図情報ダウンロードサービス',org:'国土地理院',category:'GISデータ',description:'標高や基本項目など、国土の基盤となる地理空間情報を取得できます。',url:'https://fgd.gsi.go.jp/download/menu.php',keywords:'DEM 標高 数値標高モデル'},
- {name:'国土地理院 地図・空中写真閲覧サービス',org:'国土地理院',category:'地図・航空写真',description:'過去の地図や空中写真を検索・閲覧するためのサービス。',url:'https://mapps.gsi.go.jp/',keywords:'歴史 空中写真 過去 写真'},
+ {name:'基盤地図情報ダウンロードサービス',org:'国土地理院',category:'GISデータ',description:'標高や基本項目など、国土の基盤となる地理空間情報を取得できます。',url:'https://service.gsi.go.jp/kiban/app/',keywords:'DEM 標高 数値標高モデル'},
+ {name:'国土地理院 地図・空中写真閲覧サービス',org:'国土地理院',category:'地図・航空写真',description:'過去の地図や空中写真を検索・閲覧するためのサービス。',url:'https://service.gsi.go.jp/map-photos/',keywords:'歴史 空中写真 過去 写真'},
  {name:'国土数値情報ダウンロードサイト',org:'国土交通省',category:'GISデータ',description:'土地利用、行政区域、自然・国土保全などのGISデータを公開。',url:'https://nlftp.mlit.go.jp/ksj/',keywords:'国有林 土地利用 行政界 シェープファイル'},
  {name:'国土交通省 ハザードマップポータルサイト',org:'国土交通省',category:'防災・地形',description:'洪水、土砂災害などの防災情報を地図から確認できます。',url:'https://disaportal.gsi.go.jp/',keywords:'土砂災害 リスク 斜面'},
  {name:'林野庁',org:'農林水産省',category:'森林・林業',description:'森林・林業政策、国有林野、統計などの公式情報を掲載。',url:'https://www.rinya.maff.go.jp/',keywords:'国有林 林道 森林計画'},
- {name:'森林総合研究所',org:'森林研究・整備機構',category:'森林・林業',description:'森林科学や森林管理に関する研究成果・情報を発信。',url:'https://www.ffpri.affrc.go.jp/',keywords:'研究 森林調査 森林資源'},
+ {name:'森林総合研究所',org:'森林研究・整備機構',category:'森林・林業',description:'森林科学や森林管理に関する研究成果・情報を発信。',url:'https://www.ffpri.go.jp/ffpri.html',keywords:'研究 森林調査 森林資源'},
  {name:'環境省 自然環境局 生物多様性センター',org:'環境省',category:'森林・林業',description:'植生や自然環境に関する調査情報・資料を公開。',url:'https://www.biodic.go.jp/',keywords:'植生図 自然環境 生態系'},
- {name:'JAXA 地球観測研究センター',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'衛星による地球観測やリモートセンシングの情報を発信。',url:'https://www.eorc.jaxa.jp/',keywords:'衛星画像 土地被覆 リモートセンシング'},
- {name:'JAXA G-Portal',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'JAXAの地球観測衛星データを検索・入手するためのポータル。',url:'https://gportal.jaxa.jp/',keywords:'衛星データ 観測'},
+ {name:'JAXA 地球観測研究センター',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'衛星による地球観測やリモートセンシングの情報を発信（確認時は一時停止の案内を表示）。',url:'https://www.eorc.jaxa.jp/',keywords:'衛星画像 土地被覆 リモートセンシング'},
+ {name:'JAXA G-Portal',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'JAXAの地球観測衛星データを検索・入手するためのポータル（今回、直接の動作確認は未完了）。',url:'https://gportal.jaxa.jp/',keywords:'衛星データ 観測'},
  {name:'QGIS',org:'QGIS Project',category:'GISソフト・技術',description:'オープンソースのデスクトップGIS。地図作成、空間解析、データ編集に対応。',url:'https://qgis.org/',keywords:'GIS 解析 無料 オープンソース'},
- {name:'QGIS Documentation',org:'QGIS Project',category:'GISソフト・技術',description:'QGISのユーザーガイドや学習資料を確認できます。',url:'https://docs.qgis.org/',keywords:'QGIS マニュアル 使い方'},
+ {name:'QGIS ドキュメント・学習資料',org:'QGIS Project',category:'GISソフト・技術',description:'QGIS公式のドキュメント・学習資料への案内ページ。',url:'https://www.qgis.org/resources/hub/',keywords:'QGIS マニュアル 使い方'},
  {name:'GRASS GIS',org:'GRASS Development Team',category:'GISソフト・技術',description:'地形解析やラスタ・ベクタ処理に強みを持つオープンソースGIS。',url:'https://grass.osgeo.org/',keywords:'地形解析 標高 ラスタ'},
  {name:'GDAL',org:'OSGeo',category:'GISソフト・技術',description:'地理空間ラスタ・ベクタデータの変換や処理に使うツール群。',url:'https://gdal.org/',keywords:'GeoTIFF タイル 変換 コマンド'},
  {name:'OpenStreetMap',org:'OpenStreetMap contributors',category:'地図・航空写真',description:'世界中の協力者によって整備されるオープンな地図データ。',url:'https://www.openstreetmap.org/',keywords:'道路 地図 オープンデータ'},

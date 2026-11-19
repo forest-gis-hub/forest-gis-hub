@@ -26,6 +26,14 @@
 .measure-body{padding:0 12px 12px}
 .measure-body[hidden]{display:none!important}
 .measure-panel .measure-title{margin:0}
+/* Map navigation controls */
+.map-action-control{display:flex;flex-direction:column;gap:5px;margin-top:10px!important}
+.map-action-control button{width:34px;height:34px;border:2px solid #b9c8bc;border-radius:5px;background:white;color:#183d2b;cursor:pointer;font-size:18px;box-shadow:0 1px 5px #0002}
+.map-action-control button:hover{background:#edf5ef}
+.map-action-control button:focus-visible{outline:2px solid #276a46;outline-offset:2px}
+.coordinate-display{background:#fffffff0;padding:5px 9px;border-radius:5px;box-shadow:0 1px 5px #0002;font-size:12px;color:#183d2b}
+#map:fullscreen{width:100vw!important;height:100vh!important;min-height:0!important;background:#fff}
+#map:fullscreen .leaflet-control-container{display:block}
 </style>
 </head>
 <body>
@@ -56,6 +64,39 @@ const baseLayers={
 };
 const map=L.map('map',{center:[33.59,130.40],zoom:10,layers:[baseLayers.pale]});
 let activeBase=baseLayers.pale;
+// 地図操作：ホーム・現在地・全画面・マウス座標
+const homeView={center:[33.59,130.40],zoom:10};
+const actionControl=L.control({position:'topleft'});
+actionControl.onAdd=function(){
+  const container=L.DomUtil.create('div','map-action-control leaflet-control');
+  const actions=[
+    ['⌂','福岡県の初期表示に戻る',()=>map.setView(homeView.center,homeView.zoom)],
+    ['◎','現在地へ移動',()=>{
+      if(!navigator.geolocation){alert('このブラウザでは位置情報を利用できません。');return;}
+      navigator.geolocation.getCurrentPosition(pos=>{
+        const latlng=[pos.coords.latitude,pos.coords.longitude];
+        if(window.currentPositionMarker)map.removeLayer(window.currentPositionMarker);
+        window.currentPositionMarker=L.circleMarker(latlng,{radius:8,color:'#155b3c',weight:3,fillColor:'#6cbf87',fillOpacity:.85}).addTo(map).bindPopup('現在地（推定位置）');
+        map.setView(latlng,15);
+      },err=>alert('現在地を取得できませんでした。ブラウザの位置情報許可とHTTPS接続を確認してください。'),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+    }],
+    ['⛶','地図を全画面表示／解除',async()=>{
+      try{if(document.fullscreenElement)await document.exitFullscreen();else if(map.getContainer().requestFullscreen)await map.getContainer().requestFullscreen();else alert('このブラウザは全画面表示に対応していません。');}
+      catch(e){alert('全画面表示を切り替えられませんでした。');}
+    }]
+  ];
+  actions.forEach(([symbol,title,handler])=>{const button=L.DomUtil.create('button','',container);button.type='button';button.textContent=symbol;button.title=title;button.setAttribute('aria-label',title);L.DomEvent.on(button,'click',L.DomEvent.stop).on(button,'click',handler)});
+  L.DomEvent.disableClickPropagation(container);
+  return container;
+};
+actionControl.addTo(map);
+const coordinateControl=L.control({position:'bottomleft'});
+coordinateControl.onAdd=function(){const el=L.DomUtil.create('div','coordinate-display');el.textContent='緯度・経度：地図上にカーソルを移動';this._display=el;return el};
+coordinateControl.addTo(map);
+map.on('mousemove',e=>{coordinateControl._display.textContent=`緯度 ${e.latlng.lat.toFixed(6)} / 経度 ${e.latlng.lng.toFixed(6)}`});
+map.on('mouseout',()=>{coordinateControl._display.textContent='緯度・経度：地図上にカーソルを移動'});
+document.addEventListener('fullscreenchange',()=>setTimeout(()=>map.invalidateSize(),150));
+
 document.querySelectorAll('input[name="base"]').forEach(el=>el.addEventListener('change',()=>{map.removeLayer(activeBase);activeBase=baseLayers[el.value];activeBase.addTo(map)}));
 // 国有林野の透過PNG（XYZ形式）。ズーム12より上はズーム12の画像を拡大表示。
 const forestCredit='国有林野：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-A45.html" target="_blank" rel="noopener noreferrer">国土交通省 国土数値情報（A45）</a>（加工：Forest GIS Hub、<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>）';

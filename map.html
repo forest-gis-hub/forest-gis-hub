@@ -50,15 +50,42 @@
 .opacity-head{display:flex;justify-content:space-between;gap:8px;font-size:13px}
 .shared-opacity label{font-size:12px;color:#4c6656;margin:7px 0 2px}
 .shared-opacity input{width:100%;height:28px;cursor:pointer}
-.leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:min(65vw,520px);white-space:normal;line-height:1.4;padding:4px 7px;background:#fffffff0}
+.leaflet-bottom.leaflet-left .leaflet-control-attribution a{color:#345c49;text-decoration:underline}
+.leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:min(65vw,520px);white-space:normal;line-height:1.4;padding:4px 7px;background:rgba(255,255,255,.68);color:#46574b;border-radius:4px;backdrop-filter:blur(3px)}
 .leaflet-bottom.leaflet-right .coordinate-display{margin-bottom:25px}
 @media(min-width:701px){html,body{height:100%;overflow:hidden}.layout{height:calc(100dvh - 64px);min-height:0}.layout>aside{min-height:0;overflow-y:auto;overscroll-behavior:contain}.layout>main{min-height:0}#map{height:100%;min-height:0}}
 @media(max-width:700px){.leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:75vw;font-size:10px!important}}
+/* Printing: show only the map and its active-source attribution. */
+@page{size:landscape;margin:10mm}
+@media print{
+  html,body{width:100%!important;height:auto!important;overflow:visible!important;margin:0!important;background:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header,.layout>aside,.measure-panel,.map-action-control,.coordinate-display,.leaflet-control-zoom{display:none!important}
+  .layout{display:block!important;height:auto!important;min-height:0!important}
+  .layout>main{display:block!important;overflow:visible!important;width:100%!important;height:auto!important}
+  #map{display:block!important;width:100%!important;height:170mm!important;min-height:0!important;overflow:hidden!important;position:relative!important}
+  #map .leaflet-control-attribution{display:block!important;background:rgba(255,255,255,.9)!important;color:#333!important;max-width:90%!important;font-size:10px!important}
+  #map .leaflet-control-attribution a{color:#333!important}
+  .leaflet-control-container .leaflet-top{display:none!important}
+}
+
+/* Compact header and a single collapsible sidebar */
+header{padding:8px 14px;min-height:48px;gap:8px}
+header h1{font-size:.94rem;line-height:1.3}
+header .back-link{font-size:.78rem;white-space:nowrap}
+.header-start{display:flex;align-items:center;gap:10px;min-width:0}
+.sidebar-toggle{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.4);border-radius:6px;color:#fff;font:inherit;font-size:.78rem;white-space:nowrap;padding:6px 9px;cursor:pointer}
+.sidebar-toggle:hover,.sidebar-toggle:focus-visible{background:rgba(255,255,255,.25)}
+.layout{grid-template-columns:260px minmax(0,1fr)}
+.layout.sidebar-collapsed{grid-template-columns:minmax(0,1fr)}
+.layout.sidebar-collapsed>aside{display:none!important}
+@media(min-width:701px){.layout{height:calc(100dvh - 48px)}.layout>main{min-height:0}#map{height:100%;min-height:0}}
+@media(max-width:700px){header{padding:8px 10px}.header-start{gap:6px}header h1{font-size:.82rem}.sidebar-toggle{padding:6px;font-size:.75rem}.layout.sidebar-collapsed>aside{display:none!important}.layout.sidebar-collapsed #map{height:calc(100dvh - 48px);min-height:400px}}
+@media print{header{display:none!important}}
 </style>
 </head>
 <body>
-<header><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1><a href="./index.html">← トップへ戻る</a></header>
-<div class="layout"><aside>
+<header><div class="header-start"><button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="layer-sidebar" aria-label="レイヤパネルを閉じる" title="レイヤパネルの開閉">☰ <span id="sidebar-toggle-label">レイヤ</span></button><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1></div><a class="back-link" href="./index.html">← トップへ戻る</a></header>
+<div class="layout" id="map-layout"><aside id="layer-sidebar">
 <h2>地図レイヤー</h2>
 <fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>
 <fieldset><legend>森林情報</legend><div class="simple-layer"><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><button class="select-opacity" type="button" data-select-layer="forest" aria-label="国有林野の不透明度を調整" title="不透明度を調整">⚙</button></div></fieldset>
@@ -105,6 +132,7 @@ actionControl.onAdd=function(){
         map.setView(latlng,15);
       },err=>alert('現在地を取得できませんでした。ブラウザの位置情報許可とHTTPS接続を確認してください。'),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
     }],
+    ['⎙','地図を印刷／PDF保存',()=>{window.print()}],
     ['⛶','地図を全画面表示／解除',async()=>{
       try{if(document.fullscreenElement)await document.exitFullscreen();else if(map.getContainer().requestFullscreen)await map.getContainer().requestFullscreen();else alert('このブラウザは全画面表示に対応していません。');}
       catch(e){alert('全画面表示を切り替えられませんでした。');}
@@ -184,10 +212,43 @@ sharedRange.addEventListener('input',()=>{
  sharedValue.textContent=item.opacity+'%';
 });
 selectOpacityLayer('forest');
-// Attribution is built into Leaflet and follows the currently displayed layers.
-// Move it to bottom left; the coordinate control is moved to bottom right.
-map.attributionControl.setPosition('bottomleft');
+// Explicitly control attribution based on actual map layer visibility.
+// Remove Leaflet's automatic control to avoid stale or duplicated credits.
+map.attributionControl.remove();
+const visibleCredits=L.control({position:'bottomleft'});
+visibleCredits.onAdd=function(){
+  this._container=L.DomUtil.create('div','leaflet-control-attribution active-attribution');
+  L.DomEvent.disableClickPropagation(this._container);
+  return this._container;
+};
+visibleCredits.addTo(map);
 coordinateControl.setPosition('bottomright');
+function updateVisibleCredits(){
+  const credits=[gsiCredit]; // The base map is always displayed.
+  if(map.hasLayer(forest))credits.push(forestCredit);
+  // Terrain tiles share the same GSI attribution as the base map.
+  visibleCredits._container.innerHTML=credits.join(' | ');
+}
+map.on('layeradd layerremove',updateVisibleCredits);
+updateVisibleCredits();
+
+
+// Sidebar toggle: reflow Leaflet after changing the available map width.
+const sidebarToggle=document.getElementById('sidebar-toggle');
+const mapLayout=document.getElementById('map-layout');
+const sidebarToggleLabel=document.getElementById('sidebar-toggle-label');
+sidebarToggle.addEventListener('click',()=>{
+  const collapsed=mapLayout.classList.toggle('sidebar-collapsed');
+  sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
+  sidebarToggle.setAttribute('aria-label',collapsed?'レイヤパネルを開く':'レイヤパネルを閉じる');
+  sidebarToggleLabel.textContent=collapsed?'開く':'レイヤ';
+  requestAnimationFrame(()=>map.invalidateSize({pan:false}));
+  setTimeout(()=>map.invalidateSize({pan:false}),180);
+});
+
+// Refresh tile layout when preparing a print preview.
+window.addEventListener('beforeprint',()=>{map.invalidateSize({pan:false})});
+window.addEventListener('afterprint',()=>{map.invalidateSize({pan:false})});
 
 // Built-in measurement tools (no additional libraries required).
 const measureLayer=L.layerGroup().addTo(map);

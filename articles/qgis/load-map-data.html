@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="練習用GeoJSONをQGISで開き、地図と属性テーブルで確認する手順を紹介します。">
+  <title>QGISに地図データを読み込む | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../../styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .blog-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 52px;
+      align-items: start;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.95;
+      color: #263d32;
+    }
+
+    .blog-breadcrumb {
+      font-size: .85rem;
+      margin-bottom: 32px;
+    }
+
+    .blog-article a, .blog-breadcrumb a {
+      color: #286647;
+    }
+
+    .blog-category {
+      display: inline-block;
+      background: #e7f2e9;
+      color: #286647;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.5;
+      margin: 18px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: .85rem;
+      margin-bottom: 36px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      padding: 24px;
+      background: #f3f7f3;
+      border-left: 4px solid #286647;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      line-height: 1.5;
+      margin: 55px 0 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+      scroll-margin-top: 90px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 16px;
+    }
+
+    .blog-article p { margin-bottom: 22px; }
+
+    .blog-article sup a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .history-timeline {
+      border-left: 3px solid #397653;
+      margin: 35px 0 40px 12px;
+      padding-left: 26px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #397653;
+      border: 3px solid #e7f2e9;
+    }
+
+    .timeline-year {
+      font-weight: bold;
+      color: #286647;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p { margin: 5px 0; }
+
+    .blog-sidebar {
+      position: sticky;
+      top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #b7cbbd transparent;
+      padding-right: 5px;
+    }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin: 0 0 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 9px;
+      font-size: .79rem;
+      line-height: 1.6;
+    }
+
+    .blog-toc a:hover { text-decoration: underline; }
+
+    .series-nav {
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .series-nav h2 { font-size: 1rem; margin: 0 0 6px; color: #263d32; }
+    .series-description { color: #687b70; font-size: .78rem; margin: 0 0 14px; }
+    .series-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .series-list li { min-width: 0; }
+    .series-current, .series-pending, .series-link {
+      display: flex; align-items: center; gap: 8px;
+      border-radius: 7px; padding: 7px 8px;
+      font-size: .76rem; line-height: 1.5;
+    }
+    .series-number { font-size: .76rem; font-weight: 700; flex: 0 0 auto; }
+    .series-current { background: #e7f2e9; color: #205c3d; font-weight: 700; }
+    .series-current::after { content: "閲覧中"; font-size: .66rem; margin-left: auto; white-space: nowrap; }
+    .series-pending { color: #7c8980; background: #f7f8f7; }
+    .series-link { color: #286647; text-decoration: none; border: 1px solid #dce7df; }
+    .series-link::after { content: "↗"; margin-left: auto; }
+    .series-link:hover, .series-link:focus-visible { background: #e7f2e9; border-color: #90b49d; }
+    .series-status { color: #7c8980; font-size: .72rem; margin: 12px 0 0; }
+
+    .references {
+      padding-left: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .references li {
+      margin-bottom: 20px;
+      padding-left: 5px;
+      font-size: .9rem;
+    }
+
+    .blog-note {
+      padding: 20px;
+      background: #f3f7f3;
+      border-radius: 8px;
+      font-size: .88rem;
+      margin-top: 35px;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 18px 70px;
+      }
+
+      .blog-sidebar {
+        position: static;
+        grid-row: 2;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      .blog-title { font-size: 1.85rem; }
+      .blog-article h2 { font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    .screenshot-slot { border: 1px dashed #a8c2b0; background: #f5f8f5; border-radius: 10px; padding: 22px 18px; margin: 22px 0 32px; text-align: center; color: #5b7565; }
+    .screenshot-slot strong { display: block; color: #286647; margin-bottom: 6px; }
+    .screenshot-slot span { font-size: .83rem; }
+    .step-list li { margin-bottom: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/>
+            <path d="M22 30h4v15h-4z" fill="#d8c9a2"/>
+          </svg>
+        </span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../../index.html">ホーム</a>
+        <a class="active" href="../index.html">特集・記事</a>
+        <a href="../../map.html">地図・GIS</a>
+        <a href="../../data/index.html">データ</a>
+        <a href="../../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+    <article class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト"><a href="../../index.html">ホーム</a> / <a href="../index.html">記事一覧</a> / 地図データの読み込み</nav>
+      <header>
+        <span class="blog-category">QGIS・入門シリーズ 第4回</span>
+        <h1 class="blog-title">QGISに地図データを読み込む</h1>
+        <p class="blog-date"><time datetime="2026-11-25">2026年11月25日</time></p>
+      </header>
+      <p class="blog-lead">練習用のGeoJSONを使って、QGISで地図データを開き、地点の位置と名前を確認します。</p>
+      <section id="prepare">
+        <h2>1. 練習用データを用意する</h2>
+        <p><a href="practice-points.geojson" download>練習用GeoJSONをダウンロード</a>し、作業用フォルダに保存します。ファイルには福岡県内の架空の練習地点が3つ入っています。GeoJSONやGeoPackageには、点・線・面の形と、地点名などの属性を保存できます。</p>
+      </section>
+      <section id="load">
+        <h2>2. QGISでファイルを開く</h2>
+        <ol class="step-list">
+          <li>QGISで新規プロジェクトを開きます。</li>
+          <li>保存した <code>practice-points.geojson</code> をファイル管理画面からQGISの地図キャンバスにドラッグします。</li>
+          <li>追加されたレイヤを右クリックし、レイヤの範囲にズームする項目を選びます。地図上に3つの点が表示されます。</li>
+        </ol>
+        <p>ドラッグで開けない場合は、データソースマネージャーのベクタ入力からファイルを指定できます。複数レイヤを含むGeoPackageを開く場合は、必要なレイヤを選びます。</p>
+      </section>
+      <section id="inspect">
+        <h2>3. 地点名を確認する</h2>
+        <p>レイヤを右クリックして属性テーブルを開きます。3行が表示され、<code>name</code> 列で「練習地点 A」「練習地点 B」「練習地点 C」を確認できます。背景地図を追加するまでは、キャンバスに点だけが表示されます。</p>
+      </section>
+      <section id="troubleshoot">
+        <h2>4. 表示されないとき</h2>
+        <ul>
+          <li>レイヤが一覧にないときは、保存したファイルの拡張子が <code>.geojson</code> か確認します。</li>
+          <li>レイヤはあるのに地図が空白のときは、レイヤのチェックを入れ、レイヤの範囲にズームします。</li>
+          <li>手元の別データを開いて予想外の位置に表示されたときは、配布元の説明にある座標参照系（CRS）とレイヤの設定を照合します。</li>
+        </ul>
+        <p>プロジェクトを <code>.qgz</code> で保存した後も、読み込んだデータファイルは同じ場所に置いておきます。</p>
+      </section>
+      <section id="references">
+        <h2>参考資料と関連ページ</h2>
+        <ul>
+          <li><a href="https://docs.qgis.org/3.44/en/docs/user_manual/managing_data_source/opening_data.html">QGIS公式マニュアル「データを開く」</a></li>
+          <li><a href="../../library.html">Forest GIS Libraryで公開データを探す</a></li>
+          <li><a href="../../data/index.html">Forest GIS HubのXYZタイルを見る</a></li>
+        </ul>
+      </section>
+      <p><a href="qgis-interface.html">← 前回：QGISの画面構成と基本操作</a></p>
+      <p><a href="background-maps.html">次回：背景地図の表示（構成案） →</a></p>
+      <a class="blog-back" href="../index.html">← 記事一覧に戻る</a>
+    </article>
+    <div class="blog-sidebar">
+      <aside class="blog-toc" aria-label="記事の目次"><h2>この記事の目次</h2>
+        <a href="#prepare">1. 練習用データを用意する</a>
+        <a href="#load">2. QGISでファイルを開く</a>
+        <a href="#inspect">3. 地点名を確認する</a>
+        <a href="#troubleshoot">4. 表示されないとき</a>
+        <a href="#references">参考資料と関連ページ</a>
+      </aside>
+      <nav class="series-nav" aria-label="QGIS入門シリーズの記事一覧"><h2>QGIS入門シリーズ</h2><p class="series-description">はじめてのGISを、ひとつずつ。全9回予定</p><ol class="series-list">
+        <li><a class="series-link" href="basics.html"><span class="series-number">01</span> QGISとは？</a></li>
+        <li><a class="series-link" href="qgis-install.html"><span class="series-number">02</span> インストール方法</a></li>
+        <li><a class="series-link" href="qgis-interface.html"><span class="series-number">03</span> 画面構成と基本操作</a></li>
+        <li><span class="series-current" aria-current="page"><span class="series-number">04</span> 地図データの読み込み</span></li>
+        <li><a class="series-link" href="background-maps.html"><span class="series-number">05</span> 背景地図の表示（構成案）</a></li>
+        <li><a class="series-link" href="coordinate-reference-systems.html"><span class="series-number">06</span> 座標参照系（CRS）（構成案）</a></li>
+        <li><a class="series-link" href="attribute-tables.html"><span class="series-number">07</span> 属性テーブルの基本操作（構成案）</a></li>
+        <li><a class="series-link" href="map-styles.html"><span class="series-number">08</span> 地図の表示スタイル（構成案）</a></li>
+        <li><a class="series-link" href="map-export.html"><span class="series-number">09</span> 地図の出力（構成案）</a></li>
+      </ol><p class="series-status">第5〜9回は構成案です。</p></nav>
+    </div>
+  </main>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

@@ -376,11 +376,11 @@ function createArticleCard(article) {
 
   body.append(category, title, description);
 
-  if (article.status === "published" && article.url) {
+  if ((article.status === "published" || article.status === "outline") && article.url) {
     const link = document.createElement("a");
     link.className = "article-link";
     link.href = article.url;
-    link.textContent = "記事を読む →";
+    link.textContent = article.status === "outline" ? "構成案を見る →" : "記事を読む →";
     body.appendChild(link);
   } else {
     const status = document.createElement("span");

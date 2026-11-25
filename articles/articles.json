@@ -1,5 +1,58 @@
-
 [
+  {
+    "id": "qgis-load-map-data",
+    "title": "QGISに地図データを読み込む",
+    "category": "QGIS",
+    "description": "練習用GeoJSONをQGISで開き、地図と属性テーブルで確認する手順を紹介します。",
+    "date": "2026-11-25",
+    "url": "qgis/load-map-data.html",
+    "status": "published"
+  },
+  {
+    "id": "qgis-background-maps",
+    "title": "QGIS入門 第5回｜背景地図の表示",
+    "category": "QGIS",
+    "description": "XYZタイルを追加し、練習地点の背景に地図を表示する。",
+    "date": null,
+    "url": "qgis/background-maps.html",
+    "status": "outline"
+  },
+  {
+    "id": "qgis-coordinate-reference-systems",
+    "title": "QGIS入門 第6回｜座標参照系（CRS）",
+    "category": "QGIS",
+    "description": "緯度経度と平面座標の違いを知り、レイヤとプロジェクトのCRSを確認する。",
+    "date": null,
+    "url": "qgis/coordinate-reference-systems.html",
+    "status": "outline"
+  },
+  {
+    "id": "qgis-attribute-tables",
+    "title": "QGIS入門 第7回｜属性テーブルの基本操作",
+    "category": "QGIS",
+    "description": "地点名などの属性を表示し、並べ替え・選択・絞り込みを試す。",
+    "date": null,
+    "url": "qgis/attribute-tables.html",
+    "status": "outline"
+  },
+  {
+    "id": "qgis-map-styles",
+    "title": "QGIS入門 第8回｜地図の表示スタイル",
+    "category": "QGIS",
+    "description": "点や区域の色・透明度・ラベルを調整し、背景との見分けやすさを確認する。",
+    "date": null,
+    "url": "qgis/map-styles.html",
+    "status": "outline"
+  },
+  {
+    "id": "qgis-map-export",
+    "title": "QGIS入門 第9回｜地図の出力",
+    "category": "QGIS",
+    "description": "印刷レイアウトに地図・凡例・出典を配置し、PDFへ書き出す。",
+    "date": null,
+    "url": "qgis/map-export.html",
+    "status": "outline"
+  },
   {
     "id": "qgis-basics",
     "title": "QGISとは？誕生から現在までの歴史と特徴を解説",

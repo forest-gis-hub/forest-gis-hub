@@ -1,0 +1,8 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type":"Feature","properties":{"name":"練習地点 A"},"geometry":{"type":"Point","coordinates":[130.42,33.56]}},
+    {"type":"Feature","properties":{"name":"練習地点 B"},"geometry":{"type":"Point","coordinates":[130.53,33.51]}},
+    {"type":"Feature","properties":{"name":"練習地点 C"},"geometry":{"type":"Point","coordinates":[130.61,33.59]}}
+  ]
+}

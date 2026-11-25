@@ -16,7 +16,7 @@
 /* Measurement controls: contained above the map, not the sidebar */
 #map.area-drawing, #map.area-drawing .leaflet-container{cursor:crosshair!important;touch-action:none}
 .measure-panel{position:absolute;top:12px;right:12px;z-index:1000;width:min(290px,calc(100% - 24px));background:#fff;border:1px solid #dce5dd;border-radius:12px;box-shadow:0 4px 20px #10291d26;padding:12px;color:#1c342a}
-.measure-title{font-size:13px;font-weight:700;margin:0 0 9px}.measure-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.measure-tools button,.measure-actions button{border:1px solid #cddbd0;border-radius:7px;background:white;color:#244534;padding:8px 5px;cursor:pointer;font-size:12px}.measure-tools button[aria-pressed=true]{background:#1d583b;color:white;border-color:#1d583b}.measure-result{margin:10px 0 5px;font-size:14px;font-weight:700;min-height:20px;overflow-wrap:anywhere}.measure-hint{font-size:11px;color:#65766b;margin:0 0 8px;line-height:1.5}.measure-actions{display:flex;gap:5px;flex-wrap:wrap}.measure-actions button{padding:6px 10px}.measure-actions button:disabled{opacity:.4;cursor:default}.measure-actions .primary{background:#e7f1e9}.measure-panel button:focus-visible{outline:2px solid #276a46;outline-offset:2px}#map.measuring{cursor:crosshair}.leaflet-container.measuring{cursor:crosshair!important}@media(max-width:700px){.measure-panel{top:8px;right:8px;width:min(270px,calc(100% - 16px));padding:9px}}
+.measure-title{font-size:13px;font-weight:700;margin:0 0 9px}.measure-tools{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.measure-tools button,.measure-actions button{border:1px solid #cddbd0;border-radius:7px;background:white;color:#244534;padding:8px 5px;cursor:pointer;font-size:12px}.measure-tools button[aria-pressed=true]{background:#1d583b;color:white;border-color:#1d583b}.measure-result{margin:10px 0 5px;font-size:14px;font-weight:700;min-height:20px;overflow-wrap:anywhere}.measure-hint{font-size:11px;color:#65766b;margin:0 0 8px;line-height:1.5}.measure-actions{display:flex;gap:5px;flex-wrap:wrap}.measure-actions button{padding:6px 10px}.measure-actions button:disabled{opacity:.4;cursor:default}.measure-actions .primary{background:#e7f1e9}.measure-panel button:focus-visible{outline:2px solid #276a46;outline-offset:2px}#map.measuring{cursor:crosshair}.leaflet-container.measuring{cursor:crosshair!important}@media(max-width:700px){.measure-panel{top:8px;right:8px;width:min(270px,calc(100% - 16px));padding:9px}}
 /* Collapsible measurement panel */
 .measure-panel{padding:0;width:min(300px,calc(100% - 24px));overflow:hidden}
 .measure-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:11px 13px;background:#fff;border:0;color:#1c342a;font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:left}
@@ -41,15 +41,14 @@
 .layer-card details{margin-top:9px;font-size:12px;color:#4b6253}.layer-card summary{cursor:pointer;font-weight:600}.layer-card details p{line-height:1.6;margin:7px 0 0}.layer-card a{color:#205c42}.layer-help{font-size:12px;color:#586c60;line-height:1.6}.layer-card input[type=range]{margin-top:4px}
 .opacity-details{margin-top:7px!important}.opacity-details summary{font-weight:500!important;color:#365e47;list-style:revert;cursor:pointer}.opacity-control{padding:10px 3px 4px}.opacity-control label{display:block;margin:0 0 8px!important}.opacity-control input[type=range]{display:block;width:100%;height:28px;cursor:pointer;accent-color:#276a46}.opacity-control input[type=range]::-webkit-slider-thumb{width:20px;height:20px}
 
-/* Compact layer selector and one shared opacity slider */
 .simple-layer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 0;border-bottom:1px solid #edf1ed}
 .simple-layer label{margin:0;flex:1;font-size:13px}
-.select-opacity{flex:none;border:1px solid #d4e0d6;background:#fff;border-radius:6px;color:#365b44;cursor:pointer;padding:5px 9px;font-size:15px}
-.select-opacity[aria-pressed="true"]{background:#dfeee3;border-color:#4a8560}
-.shared-opacity{background:#f1f6f1;border:1px solid #dce6de;border-radius:9px;padding:12px;margin:0 0 15px}
-.opacity-head{display:flex;justify-content:space-between;gap:8px;font-size:13px}
-.shared-opacity label{font-size:12px;color:#4c6656;margin:7px 0 2px}
-.shared-opacity input{width:100%;height:28px;cursor:pointer}
+.select-opacity,.import-panel .select-opacity{flex:none;border:1px solid #d4e0d6;background:#fff;border-radius:6px;color:#365b44;cursor:pointer;padding:5px 8px;font:inherit;font-size:.78rem;min-width:47px;min-height:30px}
+.select-opacity[aria-expanded="true"]{background:#dfeee3;border-color:#4a8560}
+.inline-opacity{display:flex;gap:8px;align-items:center;padding:3px 6px 5px;color:#43594a;font-size:.74rem}
+.inline-opacity[hidden]{display:none}
+.inline-opacity input[type=range]{min-width:0;flex:1;height:28px;cursor:pointer;padding:0;margin:0;border:0;background:transparent}
+.imported-layers li{flex-wrap:wrap}.imported-layers .inline-opacity{flex-basis:100%}
 .leaflet-bottom.leaflet-left .leaflet-control-attribution a{color:#345c49;text-decoration:underline}
 .leaflet-bottom.leaflet-left .leaflet-control-attribution{max-width:min(65vw,520px);white-space:normal;line-height:1.4;padding:4px 7px;background:rgba(255,255,255,.68);color:#46574b;border-radius:4px;backdrop-filter:blur(3px)}
 .leaflet-bottom.leaflet-right .coordinate-display{margin-bottom:25px}
@@ -83,35 +82,144 @@ header .back-link{font-size:.78rem;white-space:nowrap}
 @media(min-width:701px){.layout{height:calc(100dvh - 48px)}.layout>main{min-height:0}#map{height:100%;min-height:0}}
 @media(max-width:700px){header{padding:8px 10px}.header-start{gap:6px}header h1{font-size:.82rem}.sidebar-toggle{padding:6px;font-size:.75rem}.layout.sidebar-collapsed>aside{display:none!important}.layout.sidebar-collapsed #map{height:calc(100dvh - 48px);min-height:400px}}
 @media print{header{display:none!important}}
+.layer-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.layer-heading h2{margin:0}
+.background-only{border:1px solid #cddbd0;border-radius:6px;background:#fff;color:#244534;padding:6px 8px;cursor:pointer;font:inherit;font-size:.76rem}
+.background-only:hover{background:#edf5ef}
+.historic-layers{margin:0 0 18px}
+.historic-layers summary{cursor:pointer;font-weight:700}
+.historic-layers fieldset{margin:0}
+.historic-layers legend{font-size:.8rem;font-weight:400;color:#54665a;margin:8px 0}
+#layer-sidebar{overflow:auto;min-height:0}
+@media(max-width:700px){#layer-sidebar{max-height:45dvh}}
+.import-panel{border-top:1px solid #dce6de;padding-top:12px;margin:0 0 16px}
+.import-panel summary{cursor:pointer;font-weight:700;font-size:.9rem}
+.import-panel form{margin:14px 0}
+.import-panel h3{font-size:.87rem;margin:8px 0}
+.import-panel label{margin:7px 0 4px;font-size:.82rem}
+.import-panel input:not([type=checkbox]){width:100%;min-width:0;padding:6px;font:inherit;font-size:.78rem;border:1px solid #cddbd0;border-radius:5px;background:white}
+.import-panel button,.station-results button{font:inherit;font-size:.76rem;padding:5px 8px;border:1px solid #cddbd0;border-radius:5px;background:#f3f8f4;color:#244534;cursor:pointer}
+.import-panel form button{margin-top:7px}
+.layer-feedback{font-size:.78rem;color:#43594a;margin:6px 0;overflow-wrap:anywhere}
+.station-results,.imported-layers{list-style:none;padding:0;margin:6px 0;max-height:180px;overflow:auto}
+.station-results button{width:100%;text-align:left;margin:2px 0}
+.imported-layers li{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:4px 0}
+.imported-layers label{overflow-wrap:anywhere}
+#station-search{width:100%;font:inherit;font-size:.82rem;padding:6px;border:1px solid #cddbd0;border-radius:5px}
+#elevation-profile{margin-top:10px;border-top:1px solid #dce6de;padding-top:8px}
+#elevation-summary{font-size:.83rem;font-weight:700;margin:0 0 5px}
+#elevation-chart{display:block;width:100%;height:auto;background:#f5f9f5;border-radius:5px;font-size:11px;fill:#334f40}
+#elevation-chart[hidden]{display:none}
+#elevation-details,.elevation-source{font-size:.72rem;line-height:1.45;margin:5px 0;color:#425b4c}
+#map.picking-plan-corner{cursor:crosshair}
+.added-layer-actions{display:flex;gap:4px;flex-wrap:wrap}
+.added-layer-actions a{color:#365b44;font-size:.76rem;align-self:center;padding:3px}
 </style>
 </head>
 <body>
 <header><div class="header-start"><button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="layer-sidebar" aria-label="レイヤパネルを閉じる" title="レイヤパネルの開閉">☰ <span id="sidebar-toggle-label">レイヤ</span></button><h1>Forest GIS Hub <span style="font-weight:400">/ 地図ビューア</span></h1></div><nav class="map-nav" aria-label="メインナビゲーション"><a href="./index.html">Home</a><a href="./map.html" aria-current="page">Map</a><a href="./library.html">Library</a><a href="./articles/index.html">Journal</a></nav></header>
 <div class="layout" id="map-layout"><aside id="layer-sidebar">
-<h2>地図レイヤー</h2>
-<fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label></fieldset>
+<div class="layer-heading"><h2>地図レイヤ</h2><button type="button" class="background-only" id="background-only">背景地図だけ</button></div>
+<fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label><label><input type="radio" name="base" value="blank"> 白地図</label></fieldset>
 <fieldset><legend>森林情報</legend><div class="simple-layer"><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><button class="select-opacity" type="button" data-select-layer="forest" aria-label="国有林野の不透明度を調整" title="不透明度を調整">⚙</button></div></fieldset>
+<details class="import-panel" id="forest-plan-panel"><summary>国有林の計画図を重ねる</summary>
+<div class="simple-layer"><label><input id="nokonoshima-plan-toggle" type="checkbox"> 福岡・能古島の施業実施計画図</label><button class="select-opacity" type="button" data-select-layer="nokonoshima-plan">透明度</button></div>
+<p class="layer-help"><a href="./data/nokonoshima-forest-plan.tif" download>位置付きGeoTIFFを取得</a> · <a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/attach/pdf/zumen-405.pdf" target="_blank" rel="noopener noreferrer">出典PDF</a></p>
+<p class="layer-help">第7次計画図 5葉の内4から能古島を切り出し、地理院地図の海岸線を基準に位置を合わせました。図面の位置は目安です。</p>
+<ul class="layer-help">
+<li><a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/zumen.html" target="_blank" rel="noopener noreferrer">九州の施業実施計画図（PDF一覧）</a></li>
+<li><a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/chikibetu/chiikibetu_2024.html" target="_blank" rel="noopener noreferrer">九州の地域別の森林計画</a></li>
+<li><a href="https://www.geospatial.jp/ckan/dataset/nfgis-2024" target="_blank" rel="noopener noreferrer">国有林GISデータ（林野庁の小班区画など）</a></li>
+</ul>
+<p class="layer-help">北が上の図をPNG・JPEG・WebPにし、図面の枠外や位置図を切り取ります。地図上で画像の左上と右下に対応する位置を選ぶと、簡易的に重ねられます。</p>
+<form id="plan-image-form">
+<label for="plan-image-file">図面画像</label><input id="plan-image-file" type="file" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" required>
+<label for="plan-image-credit">出典（任意）</label><input id="plan-image-credit" type="text" maxlength="150" placeholder="例：九州森林管理局 福岡森林計画区">
+<button id="plan-pick-nw" type="button">左上を指定</button> <button id="plan-pick-se" type="button">右下を指定</button>
+<p class="layer-feedback" id="plan-corners"></p>
+<button type="submit">図面を重ねる</button>
+</form>
+<p class="layer-feedback" id="plan-status" role="status"></p>
+<p class="layer-help">縮尺や投影法の違いで位置がずれる場合があります。小班など位置情報付きのデータは、WGS 84のGeoJSONに変換して追加できます。</p>
+</details>
+<fieldset><legend>気象観測所</legend>
+<div class="simple-layer"><label><input id="amedas-toggle" type="checkbox"> アメダス観測所（全国）</label></div>
+<p class="layer-feedback" id="station-status" role="status"></p>
+<div id="station-search-panel" hidden>
+<label for="station-search">観測所名・番号で検索</label><input id="station-search" type="search" placeholder="例：福岡、ふくおか" autocomplete="off">
+<ul id="station-results" class="station-results"></ul>
+</div>
+<p class="layer-help"><a href="./data/amedas-stations.geojson" download>観測所のGeoJSONを取得</a>（2026年11月25日取得）</p>
+</fieldset>
 <fieldset><legend>地形情報</legend>
 <div class="simple-layer"><label><input id="slope-toggle" type="checkbox"> 傾斜量図</label><button class="select-opacity" type="button" data-select-layer="slope" aria-label="傾斜量図の不透明度を調整">⚙</button></div>
 <div class="simple-layer"><label><input id="hillshade-toggle" type="checkbox"> 陰影起伏図</label><button class="select-opacity" type="button" data-select-layer="hillshade" aria-label="陰影起伏図の不透明度を調整">⚙</button></div>
 <div class="simple-layer"><label><input id="redrelief-toggle" type="checkbox"> 赤色立体地図</label><button class="select-opacity" type="button" data-select-layer="redrelief" aria-label="赤色立体地図の不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="relief-toggle" type="checkbox"> 色別標高図</label><button class="select-opacity" type="button" data-select-layer="relief" aria-label="色別標高図の不透明度を調整" title="不透明度を調整">⚙</button></div>
 </fieldset>
-<section class="shared-opacity" aria-label="選択したレイヤの不透明度"><div class="opacity-head"><strong>不透明度調整</strong><output id="shared-opacity-value">75%</output></div><label id="selected-layer-name" for="shared-opacity-range">福岡県の国有林野</label><input id="shared-opacity-range" type="range" min="0" max="100" value="75"></section>
-<p class="layer-help">⚙で調整対象を選択します。地図左下には表示中のデータの出典が自動表示されます。</p>
+<details class="historic-layers"><summary>土地の成り立ち・地質</summary>
+<fieldset><legend>土地条件図と低湿地は、整備範囲内のズーム10以上で表示します。</legend>
+<div class="simple-layer"><label><input id="landcondition-toggle" type="checkbox"> 土地条件図</label><button class="select-opacity" type="button" data-select-layer="landcondition">透明度</button></div>
+<div class="simple-layer"><label><input id="wetland-toggle" type="checkbox"> 明治期の低湿地</label><button class="select-opacity" type="button" data-select-layer="wetland">透明度</button></div>
+<div class="simple-layer"><label><input id="geology-toggle" type="checkbox"> 日本シームレス地質図V2</label><button class="select-opacity" type="button" data-select-layer="geology">透明度</button></div>
+<p class="layer-help"><a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">土地条件図・低湿地の凡例</a> · <a href="https://gbank.gsj.jp/seamless/v2/api/1.3.1/legend.html" target="_blank" rel="noopener noreferrer">地質図の凡例</a></p>
+</fieldset></details>
+<details class="historic-layers"><summary>年代別空中写真</summary><fieldset><legend>撮影範囲内で、ズーム10以上から表示します。</legend>
+<div class="simple-layer"><label><input id="photo1945-toggle" type="checkbox"> 1945〜1950年</label><button class="select-opacity" type="button" data-select-layer="photo1945" aria-label="1945〜1950年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="photo1961-toggle" type="checkbox"> 1961〜1969年</label><button class="select-opacity" type="button" data-select-layer="photo1961" aria-label="1961〜1969年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="photo1974-toggle" type="checkbox"> 1974〜1978年</label><button class="select-opacity" type="button" data-select-layer="photo1974" aria-label="1974〜1978年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="photo1979-toggle" type="checkbox"> 1979〜1983年</label><button class="select-opacity" type="button" data-select-layer="photo1979" aria-label="1979〜1983年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="photo1984-toggle" type="checkbox"> 1984〜1986年</label><button class="select-opacity" type="button" data-select-layer="photo1984" aria-label="1984〜1986年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+<div class="simple-layer"><label><input id="photo1987-toggle" type="checkbox"> 1987〜1990年</label><button class="select-opacity" type="button" data-select-layer="photo1987" aria-label="1987〜1990年の不透明度を調整" title="不透明度を調整">⚙</button></div>
+</fieldset></details>
+<details class="import-panel" id="external-layers-panel"><summary>外部レイヤを追加</summary>
+<form id="external-tile-form">
+<h3>XYZタイル</h3>
+<label for="external-tile-url">公開タイルURL（HTTPS）</label>
+<input id="external-tile-url" type="text" inputmode="url" placeholder="https://…/{z}/{x}/{y}.png" required maxlength="2000">
+<label for="external-tile-name">表示名（任意）</label><input id="external-tile-name" type="text" maxlength="80">
+<label for="external-tile-credit">提供元・出典（任意）</label><input id="external-tile-credit" type="text" maxlength="150">
+<label for="external-tile-zoom">提供元の最大ズーム（任意）</label>
+<input id="external-tile-zoom" type="number" min="0" max="18" step="1" placeholder="例：14">
+<button type="submit">タイルを追加</button>
+</form>
+<form id="external-geo-form">
+<h3>GeoJSON</h3>
+<p class="layer-help">WGS 84のファイルか公開URLのどちらかを選択。最大5 MB。</p>
+<label for="external-geo-file">ファイル</label><input id="external-geo-file" type="file" accept=".geojson,.json,application/geo+json,application/json">
+<label for="external-geo-url">公開URL（HTTPS）</label><input id="external-geo-url" type="url" maxlength="2000">
+<button type="submit" id="external-geo-submit">地物を追加</button>
+</form>
+<p class="layer-help">追加したレイヤはこのページを開いている間だけ表示できます。</p>
+<p class="layer-feedback" id="import-status" role="status"></p>
+</details>
+<details class="import-panel" id="added-layers-panel"><summary>追加したレイヤ</summary>
+<ul id="imported-layers" class="imported-layers" aria-label="追加したレイヤ"></ul>
+</details>
+<p class="layer-help">レイヤ名の横の％を押すと、その場で透明度を調整できます。出典は地図左下に表示します。</p>
 </aside><main><div id="map" aria-label="福岡県周辺の地図"></div>
 <section class="measure-panel" aria-label="地図計測ツール">
 <button type="button" class="measure-toggle" id="measure-toggle" aria-expanded="false" aria-controls="measure-body"><span>📏 計測ツール</span><span class="chevron" aria-hidden="true">⌄</span></button>
 <div class="measure-body" id="measure-body" hidden>
-<div class="measure-tools"><button type="button" data-tool="distance" aria-pressed="false">↗ 距離</button><button type="button" data-tool="area" aria-pressed="false">⬡ 多角形</button><button type="button" data-tool="rectangle" aria-pressed="false">▭ 四角形</button><button type="button" data-tool="coordinate" aria-pressed="false">⌖ 座標</button></div>
+<div class="measure-tools"><button type="button" data-tool="distance" aria-pressed="false">↗ 距離</button><button type="button" data-tool="area" aria-pressed="false">⬡ 多角形</button><button type="button" data-tool="rectangle" aria-pressed="false">▭ 四角形</button><button type="button" data-tool="elevation" aria-pressed="false">勾配</button><button type="button" data-tool="coordinate" aria-pressed="false">⌖ 座標</button></div>
 <div class="measure-result" id="measure-result" aria-live="polite">ツールを選択</div>
 <p class="measure-hint" id="measure-hint">距離・多角形はクリック、四角形はドラッグで計測。</p>
-<div class="measure-actions"><button type="button" id="measure-undo" disabled>1点戻す</button><button type="button" id="measure-finish" class="primary" disabled>確定</button><button type="button" id="measure-clear">クリア</button><button type="button" id="measure-copy" hidden>座標をコピー</button></div>
+<div class="measure-actions"><button type="button" id="measure-undo" disabled>1点戻す</button><button type="button" id="measure-finish" class="primary" disabled>確定</button><button type="button" id="measure-clear">クリア</button><button type="button" id="measure-save-polygon" hidden>ポリゴンをレイヤに追加</button><button type="button" id="measure-copy" hidden>座標をコピー</button></div>
+<div id="elevation-profile" hidden>
+<p id="elevation-summary" role="status"></p>
+<svg id="elevation-chart" viewBox="0 0 328 120" role="img" aria-label="横軸が水平距離、縦軸が標高の縦断図" hidden></svg>
+<p id="elevation-details"></p>
+<p class="elevation-source">標高は地表の概算です。橋やトンネルの路面高には対応しません。<a href="https://maps.gsi.go.jp/development/demtile.html" target="_blank" rel="noopener noreferrer">出典：国土地理院</a></p>
+</div>
 </div>
 </section></main></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="./map-elevation.js"></script>
 <script>
 const gsiCredit='出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">国土地理院（地理院タイル）</a>';
+const gsiTiles='https://cyberjapandata.gsi.go.jp/xyz/';
 const baseLayers={
+ blank:L.tileLayer(gsiTiles+'blank/{z}/{x}/{y}.png',{attribution:gsiCredit,minNativeZoom:5,maxNativeZoom:14,maxZoom:18}),
  pale:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{attribution:gsiCredit,maxZoom:18}),
  std:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{attribution:gsiCredit,maxZoom:18}),
  photo:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg',{attribution:gsiCredit,maxZoom:18})
@@ -162,28 +270,18 @@ const forest=L.tileLayer('./tiles/{z}/{x}/{y}.png',{
   minZoom:9,maxNativeZoom:12,maxZoom:18,opacity:0.75,
   attribution:forestCredit,errorTileUrl:''
 });
-forest.addTo(map);
-const toggle=document.getElementById('forest-toggle');
-
-
-toggle.addEventListener('change',()=>{
-  if(toggle.checked){forest.addTo(map)}else{map.removeLayer(forest)}
-
-});
 
 // 地形タイルは背景地図の上・国有林野の下に表示する。
 map.createPane('terrainPane');
 map.getPane('terrainPane').style.zIndex=420;
+map.createPane('historicPane');
+map.getPane('historicPane').style.zIndex=410;
 const terrainCredit='出典：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">国土地理院（地理院タイル）</a>';
 const terrainLayers={
  slope:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/slopemap/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:3,maxNativeZoom:15,maxZoom:18,opacity:.65,attribution:terrainCredit}),
  hillshade:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/hillshademap/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:2,maxNativeZoom:16,maxZoom:18,opacity:.55,attribution:terrainCredit}),
  redrelief:L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/sekishoku/{z}/{x}/{y}.png',{pane:'terrainPane',minZoom:2,maxNativeZoom:14,maxZoom:18,opacity:.65,attribution:terrainCredit})
 };
-for(const [key,layer] of Object.entries(terrainLayers)){
- const toggleEl=document.getElementById(key+'-toggle');
- toggleEl.addEventListener('change',()=>{if(toggleEl.checked)layer.addTo(map);else map.removeLayer(layer)});
-}
 
 
 // Shared opacity control: exactly one slider for the selected overlay.
@@ -193,27 +291,82 @@ const layerSettings={
  hillshade:{name:'陰影起伏図',layer:terrainLayers.hillshade,opacity:55},
  redrelief:{name:'赤色立体地図',layer:terrainLayers.redrelief,opacity:65}
 };
-let selectedOpacityLayer='forest';
-const sharedRange=document.getElementById('shared-opacity-range');
-const sharedValue=document.getElementById('shared-opacity-value');
-const selectedName=document.getElementById('selected-layer-name');
-const selectButtons=[...document.querySelectorAll('[data-select-layer]')];
-function selectOpacityLayer(key){
- selectedOpacityLayer=key;
- const item=layerSettings[key];
- selectedName.textContent=item.name;
- sharedRange.value=item.opacity;
- sharedValue.textContent=item.opacity+'%';
- selectButtons.forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.selectLayer===key)));
+const geologyCredit='出典：<a href="https://gbank.gsj.jp/seamless/" target="_blank" rel="noopener noreferrer">産総研地質調査総合センター 20万分の1日本シームレス地質図V2</a>';
+const publicOverlays=[
+ ["landcondition","土地条件図","lcm25k_2012","png",10,16,65,"terrainPane"],
+ ["wetland","明治期の低湿地","swale","png",10,16,75,"terrainPane"],
+ ["geology","日本シームレス地質図V2","geology","png",0,13,60,"terrainPane"],
+ ["relief","色別標高図","relief","png",5,15,65,"terrainPane"],
+ ["photo1945","1945〜1950年","ort_USA10","png",10,17,100,"historicPane"],
+ ["photo1961","1961〜1969年","ort_old10","png",10,17,100,"historicPane"],
+ ["photo1974","1974〜1978年","gazo1","jpg",10,17,100,"historicPane"],
+ ["photo1979","1979〜1983年","gazo2","jpg",10,17,100,"historicPane"],
+ ["photo1984","1984〜1986年","gazo3","jpg",10,17,100,"historicPane"],
+ ["photo1987","1987〜1990年","gazo4","jpg",10,17,100,"historicPane"],
+];
+for(const [key,name,tileId,extension,minZoom,maxNativeZoom,opacity,pane] of publicOverlays){
+ const isGeology=key==='geology';
+ const url=isGeology?'https://gbank.gsj.jp/seamless/v2/api/1.3.1/tiles/{z}/{y}/{x}.png?layer=glf'
+  :gsiTiles+tileId+'/{z}/{x}/{y}.'+extension;
+ const layer=L.tileLayer(url,{
+  pane,minZoom,maxNativeZoom,maxZoom:18,opacity:opacity/100,attribution:isGeology?geologyCredit:gsiCredit
+ });
+ layerSettings[key]={name,layer,opacity};
 }
-selectButtons.forEach(btn=>btn.addEventListener('click',()=>selectOpacityLayer(btn.dataset.selectLayer)));
-sharedRange.addEventListener('input',()=>{
- const item=layerSettings[selectedOpacityLayer];
- item.opacity=Number(sharedRange.value);
- item.layer.setOpacity(item.opacity/100);
- sharedValue.textContent=item.opacity+'%';
+const nokonoshimaPlanBounds=[[33.60375394,130.29424667],[33.64256269,130.31476021]];
+const nokonoshimaPlan=L.imageOverlay('./data/nokonoshima-forest-plan.png',nokonoshimaPlanBounds,{pane:'historicPane',opacity:.72,interactive:false});
+layerSettings['nokonoshima-plan']={name:'福岡・能古島の施業実施計画図',layer:nokonoshimaPlan,opacity:72};
+document.getElementById('nokonoshima-plan-toggle').addEventListener('change',event=>{
+ if(event.target.checked)map.fitBounds(nokonoshimaPlanBounds,{padding:[24,24],maxZoom:15});
 });
-selectOpacityLayer('forest');
+const overlayControls=Object.entries(layerSettings).map(([key,item])=>{
+ const input=document.getElementById(key+'-toggle');
+ const update=()=>{if(input.checked)item.layer.addTo(map);else map.removeLayer(item.layer)};
+ input.addEventListener('change',update);
+ update();
+ return {input,update};
+});
+document.getElementById('background-only').addEventListener('click',()=>{
+ for(const {input,update} of overlayControls){
+  input.checked=false;
+  update();
+ }
+});
+function addInlineOpacity(button, anchor, name, opacity, layer){
+ const controls=document.createElement('div');
+ controls.className='inline-opacity';
+ controls.hidden=true;
+ const caption=document.createElement('span');
+ caption.textContent='透明度';
+ const range=document.createElement('input');
+ range.type='range';
+ range.min='0';
+ range.max='100';
+ range.value=String(100-opacity);
+ range.setAttribute('aria-label',name+'の透明度');
+ controls.append(caption,range);
+ const updateLabel=()=>{
+  button.textContent=range.value+'%';
+  button.setAttribute('aria-label',name+'の透明度 '+range.value+'%');
+ };
+ button.classList.add('select-opacity');
+ button.removeAttribute('title');
+ button.setAttribute('aria-expanded','false');
+ updateLabel();
+ button.addEventListener('click',()=>{
+  controls.hidden=!controls.hidden;
+  button.setAttribute('aria-expanded',String(!controls.hidden));
+ });
+ range.addEventListener('input',()=>{
+  layer.setOpacity(1-Number(range.value)/100);
+  updateLabel();
+ });
+ anchor.after(controls);
+}
+document.querySelectorAll('[data-select-layer]').forEach(button=>{
+ const {name,opacity,layer}=layerSettings[button.dataset.selectLayer];
+ addInlineOpacity(button,button.closest('.simple-layer'),name,opacity,layer);
+});
 // Explicitly control attribution based on actual map layer visibility.
 // Remove Leaflet's automatic control to avoid stale or duplicated credits.
 map.attributionControl.remove();
@@ -225,13 +378,23 @@ visibleCredits.onAdd=function(){
 };
 visibleCredits.addTo(map);
 coordinateControl.setPosition('bottomright');
+let appendImportedCredits=()=>{};
 function updateVisibleCredits(){
   const credits=[gsiCredit]; // The base map is always displayed.
   if(map.hasLayer(forest))credits.push(forestCredit);
-  // Terrain tiles share the same GSI attribution as the base map.
+  if(map.hasLayer(nokonoshimaPlan))credits.push('出典：<a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/attach/pdf/zumen-405.pdf" target="_blank" rel="noopener noreferrer">九州森林管理局 第7次国有林野施業実施計画図</a>（Forest GIS Hubが切り出し・位置合わせ）');
+  if(map.hasLayer(layerSettings.geology.layer))credits.push(geologyCredit);
+  if(map.hasLayer(layerSettings.relief.layer))credits.push('海域部は海上保安庁海洋情報部の資料を使用して作成');
+  if(map.hasLayer(baseLayers.photo))credits.push('GRUS画像（© Axelspace）');
   visibleCredits._container.innerHTML=credits.join(' | ');
+  appendImportedCredits(visibleCredits._container);
 }
-map.on('layeradd layerremove',updateVisibleCredits);
+let creditsQueued=false;
+map.on('layeradd layerremove',()=>{
+  if(creditsQueued)return;
+  creditsQueued=true;
+  queueMicrotask(()=>{creditsQueued=false;updateVisibleCredits()});
+});
 updateVisibleCredits();
 
 
@@ -243,7 +406,7 @@ sidebarToggle.addEventListener('click',()=>{
   const collapsed=mapLayout.classList.toggle('sidebar-collapsed');
   sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
   sidebarToggle.setAttribute('aria-label',collapsed?'レイヤパネルを開く':'レイヤパネルを閉じる');
-  sidebarToggleLabel.textContent=collapsed?'開く':'レイヤ';
+  sidebarToggleLabel.textContent='レイヤ';
   requestAnimationFrame(()=>map.invalidateSize({pan:false}));
   setTimeout(()=>map.invalidateSize({pan:false}),180);
 });
@@ -261,6 +424,7 @@ const undoBtn=document.getElementById('measure-undo');
 const finishBtn=document.getElementById('measure-finish');
 const clearBtn=document.getElementById('measure-clear');
 const copyBtn=document.getElementById('measure-copy');
+const savePolygonBtn=document.getElementById('measure-save-polygon');
 let tool=null,points=[],finished=false,copyText='';
 let dragStart=null,dragRect=null,dragActive=false;
 function dist(a,b){return a.distanceTo(b)}
@@ -270,14 +434,16 @@ function formatLength(m){return m>=1000?(m/1000).toLocaleString('ja-JP',{maximum
 function areaMeters(ps){if(ps.length<3)return 0;const R=6371008.8,rad=Math.PI/180;let sum=0;for(let i=0;i<ps.length;i++){const a=ps[i],b=ps[(i+1)%ps.length];let dl=(b.lng-a.lng)*rad;if(dl>Math.PI)dl-=2*Math.PI;if(dl< -Math.PI)dl+=2*Math.PI;sum+=dl*(2+Math.sin(a.lat*rad)+Math.sin(b.lat*rad))}return Math.abs(sum*R*R/2)}
 function formatArea(a){if(a>=1000000)return (a/1000000).toLocaleString('ja-JP',{maximumFractionDigits:3})+' km²';if(a>=10000)return (a/10000).toLocaleString('ja-JP',{maximumFractionDigits:3})+' ha';return a.toLocaleString('ja-JP',{maximumFractionDigits:1})+' m²'}
 function redraw(){measureLayer.clearLayers();if(!points.length)return;points.forEach(p=>L.circleMarker(p,{radius:5,color:'#14533a',weight:2,fillColor:'#fff',fillOpacity:1,interactive:false}).addTo(measureLayer));if(points.length>=2)L.polyline(points,{color:'#e06b38',weight:3,interactive:false}).addTo(measureLayer);if((tool==='area'||tool==='rectangle')&&points.length>=3)L.polygon(points,{color:'#e06b38',weight:2,fillColor:'#e6a362',fillOpacity:.22,interactive:false}).addTo(measureLayer)}
-function refresh(){undoBtn.disabled=finished||!points.length||tool==='coordinate';finishBtn.disabled=finished||!(tool==='distance'&&points.length>=2||(tool==='area'||tool==='rectangle')&&points.length>=3);copyBtn.hidden=tool!=='coordinate'||!copyText;
+function refresh(){undoBtn.disabled=finished||!points.length||tool==='coordinate';finishBtn.disabled=finished||!((tool==='distance'||tool==='elevation')&&points.length>=2||(tool==='area'||tool==='rectangle')&&points.length>=3);copyBtn.hidden=tool!=='coordinate'||!copyText;
+savePolygonBtn.hidden=!finished||!(tool==='area'||tool==='rectangle')||points.length<3;
 if(!tool){resultEl.textContent='ツールを選択';hintEl.textContent='距離・多角形はクリック、四角形はドラッグで計測。'}
 else if(tool==='distance'){resultEl.textContent=points.length>=2?formatLength(lengthMeters(points)):'距離：地点を指定';hintEl.textContent=finished?'計測完了。クリアすると再計測できます。':'地図をクリックして地点を追加。確定で終了。'}
+else if(tool==='elevation'){resultEl.textContent=points.length>=2?'線の長さ '+formatLength(lengthMeters(points)):'勾配：始点を指定';hintEl.textContent=finished?'クリアで新しい線を計測できます。':'地図をクリックして線を引き、確定で標高と勾配を表示します。'}
 else if(tool==='area'){resultEl.textContent=points.length>=3?formatArea(areaMeters(points)):'面積：頂点を指定';hintEl.textContent=finished?'計測完了。クリアで再計測できます。':'クリックで頂点を追加。ダブルクリックまたは確定で終了。'}
 else if(tool==='rectangle'){resultEl.textContent=points.length>=3?formatArea(areaMeters(points)):'四角形：ドラッグで指定';hintEl.textContent=finished?'計測完了。再びドラッグで描き直せます。':'地図をドラッグして四角形を描きます。'}
 else{resultEl.textContent=copyText||'座標：地点を指定';hintEl.textContent='地図をクリックすると緯度・経度（WGS84）を取得します。'}}
-function clearMeasure(){points=[];finished=false;copyText='';dragStart=null;dragActive=false;dragRect=null;measureLayer.clearLayers();refresh()}
-function setTool(next){tool=tool===next?null:next;clearMeasure();measureButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tool===tool)));map.getContainer().classList.toggle('measuring',!!tool);map.getContainer().classList.toggle('area-drawing',tool==='rectangle');if(tool==='rectangle'){map.dragging.disable()}else{map.dragging.enable()}if(tool==='area'||tool==='rectangle'){map.doubleClickZoom.disable()}else{map.doubleClickZoom.enable()}}
+function clearMeasure(){elevationProfile.clear();points=[];finished=false;copyText='';dragStart=null;dragActive=false;dragRect=null;measureLayer.clearLayers();refresh()}
+function setTool(next){tool=tool===next?null:next;clearMeasure();measureButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tool===tool)));map.getContainer().classList.toggle('measuring',!!tool);map.getContainer().classList.toggle('area-drawing',tool==='rectangle');if(tool==='rectangle'){map.dragging.disable()}else{map.dragging.enable()}if(tool==='area'||tool==='rectangle'||tool==='elevation'){map.doubleClickZoom.disable()}else{map.doubleClickZoom.enable()}}
 measureButtons.forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 // 初期状態は折りたたみ。閉じる際は描画結果を残し、地図操作だけ通常に戻す。
 const measureToggle=document.getElementById('measure-toggle');
@@ -289,6 +455,7 @@ measureToggle.addEventListener('click',()=>{
   if(!open){
     dragActive=false;
     tool=null;
+    savePolygonBtn.hidden=true;
     measureButtons.forEach(b=>b.setAttribute('aria-pressed','false'));
     map.getContainer().classList.remove('measuring','area-drawing');
     map.dragging.enable();
@@ -308,7 +475,12 @@ mapEl.addEventListener('pointermove',e=>{if(!dragActive||tool!=='rectangle')retu
 function finishDrag(e){if(!dragActive)return;const end=eventLatLng(e);dragActive=false;if(mapEl.hasPointerCapture(e.pointerId))mapEl.releasePointerCapture(e.pointerId);if(Math.abs(e.clientX-(map.latLngToContainerPoint(dragStart).x+mapEl.getBoundingClientRect().left))<4&&Math.abs(e.clientY-(map.latLngToContainerPoint(dragStart).y+mapEl.getBoundingClientRect().top))<4){measureLayer.clearLayers();points=[];refresh();return}points=rectanglePoints(dragStart,end);finished=true;redraw();refresh();e.preventDefault()}
 mapEl.addEventListener('pointerup',finishDrag);mapEl.addEventListener('pointercancel',()=>{dragActive=false;dragStart=null});
 undoBtn.addEventListener('click',()=>{if(!finished&&points.length){points.pop();redraw();refresh()}});
-finishBtn.addEventListener('click',()=>{if(!finishBtn.disabled){finished=true;refresh()}});
+finishBtn.addEventListener('click',()=>{
+ if(finishBtn.disabled)return;
+ finished=true;
+ refresh();
+ if(tool==='elevation')elevationProfile.run(points.slice());
+});
 clearBtn.addEventListener('click',clearMeasure);
 copyBtn.addEventListener('click',async()=>{if(!copyText)return;try{await navigator.clipboard.writeText(copyText);hintEl.textContent='座標をコピーしました。'}catch(e){hintEl.textContent='コピーできませんでした。表示された座標を選択してコピーしてください。'}});
 // Escape exits measurement mode. Keep normal Leaflet navigation otherwise.
@@ -318,4 +490,5 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&tool)setTool(tool)}
 window.addEventListener('load',()=>map.invalidateSize());
 window.addEventListener('resize',()=>map.invalidateSize());
 </script>
+<script src="./map-imports.js"></script>
 </body></html>

@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="XYZタイルを追加し、練習地点の背景に地図を表示する。">
+  <title>QGIS入門 第5回｜背景地図の表示 | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../../styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .blog-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 52px;
+      align-items: start;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.95;
+      color: #263d32;
+    }
+
+    .blog-breadcrumb {
+      font-size: .85rem;
+      margin-bottom: 32px;
+    }
+
+    .blog-article a, .blog-breadcrumb a {
+      color: #286647;
+    }
+
+    .blog-category {
+      display: inline-block;
+      background: #e7f2e9;
+      color: #286647;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.5;
+      margin: 18px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: .85rem;
+      margin-bottom: 36px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      padding: 24px;
+      background: #f3f7f3;
+      border-left: 4px solid #286647;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      line-height: 1.5;
+      margin: 55px 0 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+      scroll-margin-top: 90px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 16px;
+    }
+
+    .blog-article p { margin-bottom: 22px; }
+
+    .blog-article sup a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .history-timeline {
+      border-left: 3px solid #397653;
+      margin: 35px 0 40px 12px;
+      padding-left: 26px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #397653;
+      border: 3px solid #e7f2e9;
+    }
+
+    .timeline-year {
+      font-weight: bold;
+      color: #286647;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p { margin: 5px 0; }
+
+    .blog-sidebar {
+      position: sticky;
+      top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #b7cbbd transparent;
+      padding-right: 5px;
+    }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin: 0 0 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 9px;
+      font-size: .79rem;
+      line-height: 1.6;
+    }
+
+    .blog-toc a:hover { text-decoration: underline; }
+
+    .series-nav {
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .series-nav h2 { font-size: 1rem; margin: 0 0 6px; color: #263d32; }
+    .series-description { color: #687b70; font-size: .78rem; margin: 0 0 14px; }
+    .series-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .series-list li { min-width: 0; }
+    .series-current, .series-pending, .series-link {
+      display: flex; align-items: center; gap: 8px;
+      border-radius: 7px; padding: 7px 8px;
+      font-size: .76rem; line-height: 1.5;
+    }
+    .series-number { font-size: .76rem; font-weight: 700; flex: 0 0 auto; }
+    .series-current { background: #e7f2e9; color: #205c3d; font-weight: 700; }
+    .series-current::after { content: "閲覧中"; font-size: .66rem; margin-left: auto; white-space: nowrap; }
+    .series-pending { color: #7c8980; background: #f7f8f7; }
+    .series-link { color: #286647; text-decoration: none; border: 1px solid #dce7df; }
+    .series-link::after { content: "↗"; margin-left: auto; }
+    .series-link:hover, .series-link:focus-visible { background: #e7f2e9; border-color: #90b49d; }
+    .series-status { color: #7c8980; font-size: .72rem; margin: 12px 0 0; }
+
+    .references {
+      padding-left: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .references li {
+      margin-bottom: 20px;
+      padding-left: 5px;
+      font-size: .9rem;
+    }
+
+    .blog-note {
+      padding: 20px;
+      background: #f3f7f3;
+      border-radius: 8px;
+      font-size: .88rem;
+      margin-top: 35px;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 18px 70px;
+      }
+
+      .blog-sidebar {
+        position: static;
+        grid-row: 2;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      .blog-title { font-size: 1.85rem; }
+      .blog-article h2 { font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    .screenshot-slot { border: 1px dashed #a8c2b0; background: #f5f8f5; border-radius: 10px; padding: 22px 18px; margin: 22px 0 32px; text-align: center; color: #5b7565; }
+    .screenshot-slot strong { display: block; color: #286647; margin-bottom: 6px; }
+    .screenshot-slot span { font-size: .83rem; }
+    .step-list li { margin-bottom: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/>
+            <path d="M22 30h4v15h-4z" fill="#d8c9a2"/>
+          </svg>
+        </span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../../index.html">ホーム</a>
+        <a class="active" href="../index.html">特集・記事</a>
+        <a href="../../map.html">地図・GIS</a>
+        <a href="../../data/index.html">データ</a>
+        <a href="../../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+    <article class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト"><a href="../../index.html">ホーム</a> / <a href="../index.html">記事一覧</a> / 背景地図の表示</nav>
+      <header><span class="blog-category">QGIS・入門シリーズ 第5回</span><h1 class="blog-title">背景地図の表示</h1><p class="blog-date">構成案</p></header>
+      <p class="blog-lead">XYZタイルを追加し、練習地点の背景に地図を表示する。</p>
+      <section id="section1"><h2>1. 準備する</h2><p>第4回のプロジェクトを開き、背景地図の提供範囲・ズーム範囲・利用条件を確認する。</p></section>
+      <section id="section2"><h2>2. XYZ接続を追加する</h2><p>ブラウザパネルから接続を作る手順と、URLの {z}/{x}/{y} の意味を説明する。</p></section>
+      <section id="section3"><h2>3. 背景と練習地点を重ねる</h2><p>背景をレイヤ一覧の下へ移動し、表示できないときの確認箇所を整理する。</p></section>
+      <p><a href="../../map.html">地図ビューアでレイヤを切り替える</a> · <a href="../../data/index.html">公開XYZタイルのURLを見る</a></p>
+      <nav aria-label="シリーズの前後の記事">
+        <p><a href="load-map-data.html">← 前回：地図データの読み込み</a></p>
+        <p><a href="coordinate-reference-systems.html">次回：座標参照系（CRS）（構成案） →</a></p>
+      </nav>
+      <a class="blog-back" href="../index.html">← 記事一覧に戻る</a>
+    </article>
+    <div class="blog-sidebar">
+      <aside class="blog-toc" aria-label="記事の目次"><h2>この記事の目次</h2>
+        <a href="#section1">1. 準備する</a>
+        <a href="#section2">2. XYZ接続を追加する</a>
+        <a href="#section3">3. 背景と練習地点を重ねる</a>
+      </aside>
+      <nav class="series-nav" aria-label="QGIS入門シリーズの記事一覧"><h2>QGIS入門シリーズ</h2><p class="series-description">はじめてのGISを、ひとつずつ。全9回予定</p><ol class="series-list">
+        <li><a class="series-link" href="basics.html"><span class="series-number">01</span> QGISとは？</a></li>
+        <li><a class="series-link" href="qgis-install.html"><span class="series-number">02</span> インストール方法</a></li>
+        <li><a class="series-link" href="qgis-interface.html"><span class="series-number">03</span> 画面構成と基本操作</a></li>
+        <li><a class="series-link" href="load-map-data.html"><span class="series-number">04</span> 地図データの読み込み</a></li>
+        <li><span class="series-current" aria-current="page"><span class="series-number">05</span> 背景地図の表示</span></li>
+        <li><a class="series-link" href="coordinate-reference-systems.html"><span class="series-number">06</span> 座標参照系（CRS）（構成案）</a></li>
+        <li><a class="series-link" href="attribute-tables.html"><span class="series-number">07</span> 属性テーブルの基本操作（構成案）</a></li>
+        <li><a class="series-link" href="map-styles.html"><span class="series-number">08</span> 地図の表示スタイル（構成案）</a></li>
+        <li><a class="series-link" href="map-export.html"><span class="series-number">09</span> 地図の出力（構成案）</a></li>
+      </ol><p class="series-status">第5〜9回は構成案です。</p></nav>
+    </div>
+  </main>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

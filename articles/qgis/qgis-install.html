@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="QGISを初めて使う方向けに、公式サイトからのダウンロード、Windowsへのインストール、初回起動までを順番に解説します。">
+  <title>QGISのインストール方法｜ダウンロードから初回起動まで | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../../styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .blog-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 52px;
+      align-items: start;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.95;
+      color: #263d32;
+    }
+
+    .blog-breadcrumb {
+      font-size: .85rem;
+      margin-bottom: 32px;
+    }
+
+    .blog-article a, .blog-breadcrumb a {
+      color: #286647;
+    }
+
+    .blog-category {
+      display: inline-block;
+      background: #e7f2e9;
+      color: #286647;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.5;
+      margin: 18px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: .85rem;
+      margin-bottom: 36px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      padding: 24px;
+      background: #f3f7f3;
+      border-left: 4px solid #286647;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      line-height: 1.5;
+      margin: 55px 0 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+      scroll-margin-top: 90px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 16px;
+    }
+
+    .blog-article p { margin-bottom: 22px; }
+
+    .blog-article sup a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .history-timeline {
+      border-left: 3px solid #397653;
+      margin: 35px 0 40px 12px;
+      padding-left: 26px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #397653;
+      border: 3px solid #e7f2e9;
+    }
+
+    .timeline-year {
+      font-weight: bold;
+      color: #286647;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p { margin: 5px 0; }
+
+    .blog-sidebar {
+      position: sticky;
+      top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #b7cbbd transparent;
+      padding-right: 5px;
+    }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin: 0 0 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 9px;
+      font-size: .79rem;
+      line-height: 1.6;
+    }
+
+    .blog-toc a:hover { text-decoration: underline; }
+
+    .series-nav {
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .series-nav h2 { font-size: 1rem; margin: 0 0 6px; color: #263d32; }
+    .series-description { color: #687b70; font-size: .78rem; margin: 0 0 14px; }
+    .series-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .series-list li { min-width: 0; }
+    .series-current, .series-pending, .series-link {
+      display: flex; align-items: center; gap: 8px;
+      border-radius: 7px; padding: 7px 8px;
+      font-size: .76rem; line-height: 1.5;
+    }
+    .series-number { font-size: .76rem; font-weight: 700; flex: 0 0 auto; }
+    .series-current { background: #e7f2e9; color: #205c3d; font-weight: 700; }
+    .series-current::after { content: "閲覧中"; font-size: .66rem; margin-left: auto; white-space: nowrap; }
+    .series-pending { color: #7c8980; background: #f7f8f7; }
+    .series-link { color: #286647; text-decoration: none; border: 1px solid #dce7df; }
+    .series-link::after { content: "↗"; margin-left: auto; }
+    .series-link:hover, .series-link:focus-visible { background: #e7f2e9; border-color: #90b49d; }
+    .series-status { color: #7c8980; font-size: .72rem; margin: 12px 0 0; }
+
+    .references {
+      padding-left: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .references li {
+      margin-bottom: 20px;
+      padding-left: 5px;
+      font-size: .9rem;
+    }
+
+    .blog-note {
+      padding: 20px;
+      background: #f3f7f3;
+      border-radius: 8px;
+      font-size: .88rem;
+      margin-top: 35px;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 18px 70px;
+      }
+
+      .blog-sidebar {
+        position: static;
+        grid-row: 2;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      .blog-title { font-size: 1.85rem; }
+      .blog-article h2 { font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/>
+            <path d="M22 30h4v15h-4z" fill="#d8c9a2"/>
+          </svg>
+        </span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../../index.html">ホーム</a>
+        <a class="active" href="../index.html">特集・記事</a>
+        <a href="../../map.html">地図・GIS</a>
+        <a href="../../data/index.html">データ</a>
+        <a href="../../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+    <article class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト"><a href="../../index.html">ホーム</a> / <a href="../index.html">記事一覧</a> / QGISのインストール方法</nav>
+      <header><span class="blog-category">QGIS・入門シリーズ 第2回</span><h1 class="blog-title">QGISのインストール方法｜初心者向けにダウンロードから起動まで解説</h1><p class="blog-date">公開準備中</p></header>
+      <p class="blog-lead">QGISを使い始めるには、まずパソコンにソフトウェアをインストールします。この記事ではWindowsを使う初心者に向けて、公式サイトでの入手から最初の起動までを順番に紹介します。</p>
+      <section id="section1"><h2>1. インストールする前に</h2>
+        <p>QGISは無料で利用できる地理情報システム（GIS）ソフトウェアです。地図を表示したり、位置情報を持つデータを重ね合わせたりできます。</p>
+        <p>この記事では<strong>Windows版</strong>を中心に説明します。インストールには、ソフトウェアを保存できる空き容量とインターネット接続が必要です。職場や学校の管理パソコンでは、インストール権限が制限されている場合があります。</p>
+        <div class="blog-note"><strong>ポイント：</strong>検索結果に表示された非公式の配布サイトではなく、必ずQGISの公式サイトから入手しましょう。</div>
+      </section>
+      <section id="section2"><h2>2. QGIS公式サイトからダウンロードする</h2>
+        <p>ブラウザで<a href="https://qgis.org/" target="_blank" rel="noopener noreferrer">QGIS公式サイト</a>を開き、ダウンロードページへ進みます。ダウンロード画面の表示やボタン名は、公式サイトの更新により変わることがあります。</p>
+        <ol><li>公式サイトを開く。</li><li>「Download（ダウンロード）」の案内を選ぶ。</li><li>Windows向けのインストーラーを探す。</li><li>利用したいバージョンのインストーラーをダウンロードする。</li></ol>
+        <p>MacやLinuxを使っている場合も、同じ公式ダウンロードページから対応する案内を確認できます。</p>
+      </section>
+      <section id="section3"><h2>3. QGISのバージョンはどれを選ぶ？</h2>
+        <p>ダウンロードページでは、通常のリリース版と<strong>LTR（Long Term Release：長期サポート版）</strong>が案内される場合があります。</p>
+        <h3>通常のリリース版</h3><p>比較的新しい機能や改善を利用したい方向けです。</p>
+        <h3>LTR（長期サポート版）</h3><p>安定性を重視して利用したい場合の選択肢です。はじめて学習する人で特別な指定がなければ、LTRを選ぶと進めやすいでしょう。</p>
+        <p>学校や職場で使用する場合は、教材や組織で指定されたバージョンを優先してください。画面の構成や機能名はバージョンによって異なることがあります。</p>
+      </section>
+      <section id="section4"><h2>4. WindowsにQGISをインストールする</h2>
+        <p>ダウンロードしたインストーラーを実行します。以下は一般的な手順です。実際の画面や選択項目は配布形式やバージョンによって異なります。</p>
+        <ol><li>ダウンロードしたインストーラーファイルをダブルクリックする。</li><li>Windowsの確認画面が表示されたら、配布元を確認して操作を続ける。</li><li>セットアップ画面の案内を読み、必要な項目を選択する。</li><li>インストール先などに特別な理由がなければ、標準設定を基本に進める。</li><li>インストール完了の表示を確認し、セットアップを終了する。</li></ol>
+        <div class="blog-note"><strong>注意：</strong>インストールの途中で管理者権限を求められる場合があります。管理対象のパソコンでは、無理に設定を変更せず管理者に確認してください。</div>
+      </section>
+      <section id="section5"><h2>5. QGISを起動して確認する</h2>
+        <p>WindowsのスタートメニューなどからQGISを探して起動します。初回は起動まで少し時間がかかる場合があります。</p>
+        <p>地図を表示する広い領域や、レイヤを管理するパネル、メニュー・ツールバーなどが見えれば、基本的な起動確認は完了です。この段階で地図が表示されていなくても問題ありません。地図データは次回以降の記事で読み込みます。</p>
+      </section>
+      <section id="section6"><h2>6. よくある疑問と対処法</h2>
+        <h3>QGISは無料で使える？</h3><p>はい。QGISはオープンソースソフトウェアで、無料で利用できます。</p>
+        <h3>ダウンロードしたファイルが見つからない</h3><p>ブラウザのダウンロード履歴や、Windowsの「ダウンロード」フォルダを確認しましょう。</p>
+        <h3>インストールできない</h3><p>Windowsのバージョンやパソコンの管理権限、空き容量、ダウンロードの完了状況を確認してください。詳細な要件は公式ダウンロードページの案内を参照しましょう。</p>
+        <h3>古いQGISが入っている</h3><p>既存の環境やプラグインを使っている場合は、安易に削除せず、利用中のバージョンと新しいバージョンの扱いを確認してください。</p>
+      </section>
+      <section id="section7"><h2>7. まとめ</h2><p>QGISを使い始めるための流れは、<strong>公式サイトでダウンロード → インストール → 起動確認</strong>の3段階です。まずはQGISが起動するところまで進めれば十分です。</p><p>次回は、QGISの画面構成と基本操作を紹介します。</p></section>
+      <section id="references"><h2>参考資料</h2><ol class="references"><li>QGIS Project. <a href="https://qgis.org/" target="_blank" rel="noopener noreferrer">QGIS公式サイト</a>（ダウンロード・製品情報）</li><li>QGIS Documentation. <a href="https://docs.qgis.org/" target="_blank" rel="noopener noreferrer">QGIS公式ドキュメント</a></li></ol><div class="blog-note">本記事はQGISの公式サイトへの案内を含む、Forest GIS Hubによる独自の初心者向け解説です。QGIS公式記事ではありません。配布方法や画面の最新情報は公式サイトをご確認ください。</div></section>
+      <a class="blog-back" href="../index.html">← 記事一覧に戻る</a>
+    </article>
+    <div class="blog-sidebar">
+      <aside class="blog-toc" aria-label="記事の目次"><h2>この記事の目次</h2>
+        <a href="#section1">1. インストールする前に</a><a href="#section2">2. 公式サイトからダウンロード</a><a href="#section3">3. バージョンの選び方</a><a href="#section4">4. Windowsにインストール</a><a href="#section5">5. 初回起動と確認</a><a href="#section6">6. よくある疑問</a><a href="#section7">7. まとめ</a><a href="#references">参考資料</a>
+      </aside>
+      <nav class="series-nav" aria-label="QGIS入門シリーズの記事一覧"><h2>QGIS入門シリーズ</h2><p class="series-description">はじめてのGISを、ひとつずつ。全9回予定</p><ol class="series-list">
+        <li><a class="series-link" href="basics.html"><span class="series-number">01</span> QGISとは？</a></li>
+        <li><span class="series-current" aria-current="page"><span class="series-number">02</span> インストール方法</span></li>
+        <li><span class="series-pending"><span class="series-number">03</span> 画面構成と基本操作</span></li>
+        <li><a class="series-link" href="load-map-data.html"><span class="series-number">04</span> 地図データの読み込み</a></li>
+        <li><a class="series-link" href="background-maps.html"><span class="series-number">05</span> 背景地図の表示（構成案）</a></li>
+        <li><a class="series-link" href="coordinate-reference-systems.html"><span class="series-number">06</span> 座標参照系（CRS）（構成案）</a></li>
+        <li><a class="series-link" href="attribute-tables.html"><span class="series-number">07</span> 属性テーブルの基本操作（構成案）</a></li>
+        <li><a class="series-link" href="map-styles.html"><span class="series-number">08</span> 地図の表示スタイル（構成案）</a></li>
+        <li><a class="series-link" href="map-export.html"><span class="series-number">09</span> 地図の出力（構成案）</a></li>
+      </ol><p class="series-status">第5〜9回は構成案です。</p></nav>
+    </div>
+  </main>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

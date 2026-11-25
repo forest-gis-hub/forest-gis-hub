@@ -22,9 +22,13 @@
       <a class="brand" href="../index.html">
         <span><strong>FOREST GIS HUB</strong><small>森林・林業・地理空間情報</small></span>
       </a>
-      <nav class="main-nav">
-        <a href="../index.html">ホーム</a>
-        <a class="active" href="index.html">各種データ</a>
+      <button class="menu-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../index.html">Home</a>
+        <a href="../map.html">Map</a>
+        <a href="../library.html">Library</a>
+        <a href="../articles/index.html">Journal</a>
+        <a class="active" aria-current="page" href="index.html">各種データ</a>
       </nav>
     </div>
   </header>
@@ -33,6 +37,7 @@
     <p class="section-kicker">OPEN GEOSPATIAL DATA</p>
     <h1>各種データ</h1>
     <p>森林・林業に関するGISデータやXYZタイルを公開するページです。</p>
+    <p><a id="return-link" href="../articles/index.html">← 記事一覧へ戻る</a></p>
 
     <section class="dataset-card">
       <p class="section-kicker">XYZ TILE</p>
@@ -49,12 +54,12 @@
 </button>
 
 
-      <p class="data-note">※ タイルの公開後にURLを掲載します。データの出典・利用条件も確認のうえ公開します。</p>
+      <p class="data-note">※ データの出典・利用条件は確認後に掲載します。</p>
     </section>
 
     <section class="dataset-card">
       <h2>QGISでの利用方法</h2>
-      <p>QGISのブラウザパネルで「XYZ Tiles」を右クリックし、「新しい接続」を選択します。公開後のURLを入力して接続してください。</p>
+      <p>QGISのブラウザパネルで「XYZ Tiles」を右クリックし、「新しい接続」を選択します。上の「URLをコピー」で取得したURLを、新しい接続のURL欄に貼り付けてください。</p>
     </section>
 
     <section class="dataset-card">
@@ -69,5 +74,29 @@
       <span>個人運営の情報サイトです。</span>
     </div>
   </footer>
+  <script>
+    if (document.referrer) {
+      const previous = new URL(document.referrer);
+      const siteRoot = new URL('../', location.href);
+      if (previous.origin === siteRoot.origin) {
+        const returnLink = document.getElementById('return-link');
+        const articleRoot = new URL('articles/', siteRoot).pathname;
+        const homePath = new URL('index.html', siteRoot).pathname;
+        const libraryPath = new URL('library.html', siteRoot).pathname;
+
+        if (previous.pathname.startsWith(articleRoot)) {
+          returnLink.href = previous.href;
+          returnLink.textContent = '← 元の記事画面へ戻る';
+        } else if (previous.pathname === libraryPath) {
+          returnLink.href = previous.href;
+          returnLink.textContent = '← Libraryへ戻る';
+        } else if (previous.pathname === siteRoot.pathname || previous.pathname === homePath) {
+          returnLink.href = previous.href;
+          returnLink.textContent = '← ホームへ戻る';
+        }
+      }
+    }
+  </script>
+  <script src="../script.js" defer></script>
 </body>
 </html>

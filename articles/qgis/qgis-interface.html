@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="QGIS初心者向けに、画面の見方、地図キャンバス、レイヤパネル、ズームや移動、プロジェクト保存など基本操作を解説します。">
+  <title>QGISの画面構成と基本操作｜初心者向けガイド | Forest GIS Hub</title>
+  <link rel="stylesheet" href="../../styles.css">
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    .blog-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 55px 24px 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 52px;
+      align-items: start;
+    }
+
+    .blog-article {
+      min-width: 0;
+      line-height: 1.95;
+      color: #263d32;
+    }
+
+    .blog-breadcrumb {
+      font-size: .85rem;
+      margin-bottom: 32px;
+    }
+
+    .blog-article a, .blog-breadcrumb a {
+      color: #286647;
+    }
+
+    .blog-category {
+      display: inline-block;
+      background: #e7f2e9;
+      color: #286647;
+      border-radius: 5px;
+      padding: 4px 12px;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    .blog-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.5;
+      margin: 18px 0;
+    }
+
+    .blog-date {
+      color: #687b70;
+      font-size: .85rem;
+      margin-bottom: 36px;
+    }
+
+    .blog-lead {
+      font-size: 1.05rem;
+      padding: 24px;
+      background: #f3f7f3;
+      border-left: 4px solid #286647;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 45px;
+    }
+
+    .blog-article h2 {
+      font-size: 1.55rem;
+      line-height: 1.5;
+      margin: 55px 0 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #286647;
+      scroll-margin-top: 90px;
+    }
+
+    .blog-article h3 {
+      font-size: 1.2rem;
+      margin: 32px 0 16px;
+    }
+
+    .blog-article p { margin-bottom: 22px; }
+
+    .blog-article sup a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .history-timeline {
+      border-left: 3px solid #397653;
+      margin: 35px 0 40px 12px;
+      padding-left: 26px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 8px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #397653;
+      border: 3px solid #e7f2e9;
+    }
+
+    .timeline-year {
+      font-weight: bold;
+      color: #286647;
+      font-size: 1.1rem;
+    }
+
+    .timeline-item p { margin: 5px 0; }
+
+    .blog-sidebar {
+      position: sticky;
+      top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: #b7cbbd transparent;
+      padding-right: 5px;
+    }
+
+    .blog-toc {
+      background: #f3f7f3;
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .blog-toc h2 {
+      font-size: 1rem;
+      margin: 0 0 16px;
+    }
+
+    .blog-toc a {
+      display: block;
+      color: #286647;
+      text-decoration: none;
+      margin-bottom: 9px;
+      font-size: .79rem;
+      line-height: 1.6;
+    }
+
+    .blog-toc a:hover { text-decoration: underline; }
+
+    .series-nav {
+      border: 1px solid #dce7df;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+    }
+    .series-nav h2 { font-size: 1rem; margin: 0 0 6px; color: #263d32; }
+    .series-description { color: #687b70; font-size: .78rem; margin: 0 0 14px; }
+    .series-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .series-list li { min-width: 0; }
+    .series-current, .series-pending, .series-link {
+      display: flex; align-items: center; gap: 8px;
+      border-radius: 7px; padding: 7px 8px;
+      font-size: .76rem; line-height: 1.5;
+    }
+    .series-number { font-size: .76rem; font-weight: 700; flex: 0 0 auto; }
+    .series-current { background: #e7f2e9; color: #205c3d; font-weight: 700; }
+    .series-current::after { content: "閲覧中"; font-size: .66rem; margin-left: auto; white-space: nowrap; }
+    .series-pending { color: #7c8980; background: #f7f8f7; }
+    .series-link { color: #286647; text-decoration: none; border: 1px solid #dce7df; }
+    .series-link::after { content: "↗"; margin-left: auto; }
+    .series-link:hover, .series-link:focus-visible { background: #e7f2e9; border-color: #90b49d; }
+    .series-status { color: #7c8980; font-size: .72rem; margin: 12px 0 0; }
+
+    .references {
+      padding-left: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .references li {
+      margin-bottom: 20px;
+      padding-left: 5px;
+      font-size: .9rem;
+    }
+
+    .blog-note {
+      padding: 20px;
+      background: #f3f7f3;
+      border-radius: 8px;
+      font-size: .88rem;
+      margin-top: 35px;
+    }
+
+    .blog-back {
+      display: inline-block;
+      margin-top: 45px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 30px 18px 70px;
+      }
+
+      .blog-sidebar {
+        position: static;
+        grid-row: 2;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      .blog-title { font-size: 1.85rem; }
+      .blog-article h2 { font-size: 1.35rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    .screenshot-slot { border: 1px dashed #a8c2b0; background: #f5f8f5; border-radius: 10px; padding: 22px 18px; margin: 22px 0 32px; text-align: center; color: #5b7565; }
+    .screenshot-slot strong { display: block; color: #286647; margin-bottom: 6px; }
+    .screenshot-slot span { font-size: .83rem; }
+    .step-list li { margin-bottom: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="topline">
+    <div class="container topline-inner">
+      <span>FORESTRY · GIS · REMOTE SENSING</span>
+      <span>森林・林業と地理空間情報のナレッジハブ</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="../../index.html" aria-label="Forest GIS Hub ホーム">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 3 8 25h9L7 39h34L31 25h9L24 3Z" fill="currentColor"/>
+            <path d="M22 30h4v15h-4z" fill="#d8c9a2"/>
+          </svg>
+        </span>
+        <span>
+          <strong>FOREST GIS HUB</strong>
+          <small>森林・林業・地理空間情報</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle"
+        aria-label="メニューを開く"
+        aria-expanded="false">☰</button>
+
+      <nav class="main-nav" aria-label="メインナビゲーション">
+        <a href="../../index.html">ホーム</a>
+        <a class="active" href="../index.html">特集・記事</a>
+        <a href="../../map.html">地図・GIS</a>
+        <a href="../../data/index.html">データ</a>
+        <a href="../../index.html#about">このサイトについて</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-layout">
+    <article class="blog-article">
+      <nav class="blog-breadcrumb" aria-label="パンくずリスト"><a href="../../index.html">ホーム</a> / <a href="../index.html">記事一覧</a> / QGISの画面構成と基本操作</nav>
+      <header><span class="blog-category">QGIS・入門シリーズ 第3回</span><h1 class="blog-title">QGISの画面構成と基本操作｜初めての人が覚えたい画面の見方</h1><p class="blog-date">公開準備中</p></header>
+      <p class="blog-lead">QGISをインストールできたら、次は画面の見方を覚えましょう。この記事では、初めてGISを使う人に向けて、QGISの主な画面構成と基本操作を順番に紹介します。操作画面の画像は後日追加予定です。</p>
+      <section id="section1"><h2>1. QGISを起動したら、まず何を見る？</h2><p>QGISを起動すると、中央に大きな地図表示領域があり、その周囲にメニューやパネルが並んでいます。初めて起動した直後は地図が真っ白でも正常です。地図データをまだ読み込んでいないためです。</p><p>最初からすべての機能を覚える必要はありません。まずは<strong>地図キャンバス・レイヤパネル・ツールバー</strong>の3つを見分けられれば十分です。</p><div class="screenshot-slot"><strong>スクリーンショット追加予定 ①</strong><span>QGIS起動直後の画面全体。主要な部分に番号を付ける</span></div></section>
+      <section id="section2"><h2>2. 画面の各部分の役割</h2><h3>① 地図キャンバス</h3><p>画面中央の広い領域です。読み込んだ地図データがここに表示されます。マウスで表示範囲を動かしたり、拡大・縮小したりします。</p><h3>② レイヤパネル</h3><p>読み込んだ地図データの一覧です。QGISでは、道路、河川、森林などの情報を<strong>レイヤ</strong>として重ねて表示します。チェックを外すと、そのレイヤを一時的に非表示にできます。</p><h3>③ メニューバーとツールバー</h3><p>画面上部には「プロジェクト」「レイヤ」などのメニューがあり、よく使う操作はアイコンでも実行できます。アイコンにマウスを重ねると、機能名が表示されることがあります。</p><h3>④ ブラウザパネル</h3><p>パソコン内のフォルダや地理空間データなどを探すためのパネルです。見当たらない場合は、メニューの「ビュー」→「パネル」から表示状態を確認できます。</p><h3>⑤ ステータスバー</h3><p>画面下部には縮尺や座標参照系（CRS）などが表示されます。意味は後の回で詳しく扱うので、今は場所だけ確認しましょう。</p><div class="screenshot-slot"><strong>スクリーンショット追加予定 ②</strong><span>レイヤパネル・ブラウザパネル・ステータスバーの拡大図</span></div></section>
+      <section id="section3"><h2>3. 地図を拡大・縮小・移動する</h2><p>地図を表示したときに最もよく使うのが、表示範囲を変える操作です。</p><ol class="step-list"><li><strong>拡大・縮小：</strong>地図キャンバス上でマウスホイールを回します。</li><li><strong>移動：</strong>地図キャンバスをマウスでドラッグして表示位置を動かします。操作モードや設定によっては「地図を移動」ツールを選んでください。</li><li><strong>全体表示：</strong>ツールバーの全体表示やレイヤを右クリックした「レイヤの領域にズーム」を使うと、目的の範囲に戻りやすくなります。</li></ol><p>データをまだ読み込んでいない場合は、拡大・縮小の変化が分かりにくいことがあります。次回、地図データを読み込んだ後に試してみましょう。</p><div class="screenshot-slot"><strong>スクリーンショット追加予定 ③</strong><span>ズーム・移動に使うツールバーの位置</span></div></section>
+      <section id="section4"><h2>4. パネルが消えたときの戻し方</h2><p>操作中にレイヤパネルなどを閉じても、慌てなくて大丈夫です。メニューバーの<strong>「ビュー」→「パネル」</strong>から、表示したいパネルにチェックを入れることで再表示できます。</p><p>パネルの境界をドラッグすると幅を調整できます。作業しやすい配置に変えても問題ありません。</p><div class="screenshot-slot"><strong>スクリーンショット追加予定 ④</strong><span>「ビュー」→「パネル」のメニュー画面</span></div></section>
+      <section id="section5"><h2>5. プロジェクトを保存する</h2><p>QGISでは、表示しているレイヤや表示設定などを<strong>プロジェクト</strong>として保存できます。地図データそのものを保存する操作とは異なる点が重要です。</p><ol class="step-list"><li>メニューの「プロジェクト」→「名前を付けて保存」を選びます。</li><li>保存先のフォルダを指定します。</li><li>例として <code>qgis-practice.qgz</code> という名前で保存します。</li><li>次回は保存した <code>.qgz</code> ファイルを開いて作業を再開できます。</li></ol><p>プロジェクトは元の地図データを参照するため、後から地図データの場所を移動すると、参照先が見つからなくなることがあります。練習用のフォルダを決めて整理すると便利です。</p><div class="screenshot-slot"><strong>スクリーンショット追加予定 ⑤</strong><span>プロジェクトの保存画面と .qgz ファイル</span></div></section>
+      <section id="section6"><h2>6. 初心者がつまずきやすいポイント</h2><h3>画面が真っ白なのは故障？</h3><p>地図データが未読み込みなら正常です。次回の記事で実際のデータを表示します。</p><h3>パネルの配置が記事と違う</h3><p>QGISのバージョンや設定によって配置が異なることがあります。機能名を手掛かりに探しましょう。</p><h3>保存したのに地図データが見つからない</h3><p>プロジェクトファイルと地図データは別物です。元データの移動・削除がないか確認してください。</p><h3>操作を間違えたら？</h3><p>地図の表示範囲を変えただけなら、データそのものが変更されるわけではありません。ただし編集操作は別なので、慣れるまでは元データを編集せずに操作しましょう。</p></section>
+      <section id="section7"><h2>7. まとめ</h2><p>今回は、QGISの画面を構成する主な部分と、地図の拡大・縮小、パネルの再表示、プロジェクト保存を紹介しました。</p><p>まずは<strong>「どこに何があるか」</strong>を把握できれば十分です。次回は、実際に地図データを読み込み、レイヤとして表示する方法を解説します。</p></section>
+      <section id="references"><h2>参考資料</h2><ol class="references"><li>QGIS Project. <a href="https://docs.qgis.org/" target="_blank" rel="noopener noreferrer">QGIS公式ドキュメント</a>（ユーザーマニュアル）</li><li>QGIS Project. <a href="https://qgis.org/" target="_blank" rel="noopener noreferrer">QGIS公式サイト</a></li></ol><div class="blog-note">画面やメニューの名称・位置は、QGISのバージョンやOS、設定によって異なる場合があります。公開前に実機の画面で確認し、スクリーンショットを追加する予定です。</div></section>
+      <p><a href="load-map-data.html">次回：QGISに地図データを読み込む →</a></p>
+      <a class="blog-back" href="../index.html">← 記事一覧に戻る</a>
+    </article>
+    <div class="blog-sidebar">
+      <aside class="blog-toc" aria-label="記事の目次"><h2>この記事の目次</h2>
+        <a href="#section1">1. QGISを起動したら、まず何を見る？</a>
+        <a href="#section2">2. 画面の各部分の役割</a>
+        <a href="#section3">3. 地図を拡大・縮小・移動する</a>
+        <a href="#section4">4. パネルが消えたときの戻し方</a>
+        <a href="#section5">5. プロジェクトを保存する</a>
+        <a href="#section6">6. 初心者がつまずきやすいポイント</a>
+        <a href="#section7">7. まとめ</a>
+        <a href="#references">参考資料</a>
+      </aside>
+      <nav class="series-nav" aria-label="QGIS入門シリーズの記事一覧"><h2>QGIS入門シリーズ</h2><p class="series-description">はじめてのGISを、ひとつずつ。全9回予定</p><ol class="series-list">
+        <li><a class="series-link" href="basics.html"><span class="series-number">01</span> QGISとは？</a></li>
+        <li><a class="series-link" href="qgis-install.html"><span class="series-number">02</span> インストール方法</a></li>
+        <li><span class="series-current" aria-current="page"><span class="series-number">03</span> 画面構成と基本操作</span></li>
+        <li><a class="series-link" href="load-map-data.html"><span class="series-number">04</span> 地図データの読み込み</a></li>
+        <li><a class="series-link" href="background-maps.html"><span class="series-number">05</span> 背景地図の表示（構成案）</a></li>
+        <li><a class="series-link" href="coordinate-reference-systems.html"><span class="series-number">06</span> 座標参照系（CRS）（構成案）</a></li>
+        <li><a class="series-link" href="attribute-tables.html"><span class="series-number">07</span> 属性テーブルの基本操作（構成案）</a></li>
+        <li><a class="series-link" href="map-styles.html"><span class="series-number">08</span> 地図の表示スタイル（構成案）</a></li>
+        <li><a class="series-link" href="map-export.html"><span class="series-number">09</span> 地図の出力（構成案）</a></li>
+      </ol><p class="series-status">第5〜9回は構成案です。</p></nav>
+    </div>
+  </main>
+  <script src="../../script.js" defer></script>
+</body>
+</html>

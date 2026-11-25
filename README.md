@@ -8,7 +8,7 @@
 
 | ページ | 内容 |
 | --- | --- |
-| [Library｜リンク集](https://forest-gis-hub.pages.dev/library.html) | 国有林の計画図、森林の公開データ、林業の読み物、気象観測などの情報源を、カテゴリとキーワードで探せます。 |
+| [Library｜リンク集](https://forest-gis-hub.pages.dev/library.html) | 森林・林業、地形、GISデータ、衛星画像などの公開情報を、カテゴリとキーワードで探せます。 |
 | [Map｜地図ビューア](https://forest-gis-hub.pages.dev/map.html) | 地形図・年代別空中写真・地質図などを重ねて比較できます。アメダス観測所の検索、距離・面積・勾配の計測、ポリゴンの作成、外部XYZタイルやGeoJSONの取り込みにも対応しています。 |
 | [Journal｜記事](https://forest-gis-hub.pages.dev/articles/index.html) | QGISの基本操作や地図データの読み込み方を、入門シリーズで紹介しています。 |
 | [公開データ](https://forest-gis-hub.pages.dev/data/index.html) | 福岡県の国有林区域を表示するXYZタイルのURLと、QGISへの登録手順を掲載しています。 |

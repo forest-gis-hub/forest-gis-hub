@@ -123,9 +123,6 @@ header .back-link{font-size:.78rem;white-space:nowrap}
 <fieldset><legend>背景地図</legend><label><input type="radio" name="base" value="pale" checked> 淡色地図</label><label><input type="radio" name="base" value="std"> 標準地図</label><label><input type="radio" name="base" value="photo"> 写真</label><label><input type="radio" name="base" value="blank"> 白地図</label></fieldset>
 <fieldset><legend>森林情報</legend><div class="simple-layer"><label><input id="forest-toggle" type="checkbox" checked> 福岡県の国有林野</label><button class="select-opacity" type="button" data-select-layer="forest" aria-label="国有林野の不透明度を調整" title="不透明度を調整">⚙</button></div></fieldset>
 <details class="import-panel" id="forest-plan-panel"><summary>国有林の計画図を重ねる</summary>
-<div class="simple-layer"><label><input id="nokonoshima-plan-toggle" type="checkbox"> 福岡・能古島の施業実施計画図</label><button class="select-opacity" type="button" data-select-layer="nokonoshima-plan">透明度</button></div>
-<p class="layer-help"><a href="./data/nokonoshima-forest-plan.tif" download>位置付きGeoTIFFを取得</a> · <a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/attach/pdf/zumen-405.pdf" target="_blank" rel="noopener noreferrer">出典PDF</a></p>
-<p class="layer-help">第7次計画図 5葉の内4から能古島を切り出し、地理院地図の海岸線を基準に位置を合わせました。図面の位置は目安です。</p>
 <ul class="layer-help">
 <li><a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/zumen.html" target="_blank" rel="noopener noreferrer">九州の施業実施計画図（PDF一覧）</a></li>
 <li><a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/chikibetu/chiikibetu_2024.html" target="_blank" rel="noopener noreferrer">九州の地域別の森林計画</a></li>
@@ -149,7 +146,9 @@ header .back-link{font-size:.78rem;white-space:nowrap}
 <label for="station-search">観測所名・番号で検索</label><input id="station-search" type="search" placeholder="例：福岡、ふくおか" autocomplete="off">
 <ul id="station-results" class="station-results"></ul>
 </div>
-<p class="layer-help"><a href="./data/amedas-stations.geojson" download>観測所のGeoJSONを取得</a>（2026年11月25日取得）</p>
+<p class="layer-help">地点を選ぶと、名前と位置をGeoJSONで保存できます。雨量・気温などは気象庁のサイトで地点と期間を指定してください。</p>
+<p class="layer-help"><a href="https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html" target="_blank" rel="noopener noreferrer">気象庁の観測所一覧</a> · <a href="https://www.data.jma.go.jp/risk/obsdl/" target="_blank" rel="noopener noreferrer">過去の観測値をダウンロード</a></p>
+<p class="layer-help"><a href="./data/amedas-stations.geojson" download>全国の観測所位置（GeoJSON）</a>（2026年11月25日取得）</p>
 </fieldset>
 <fieldset><legend>地形情報</legend>
 <div class="simple-layer"><label><input id="slope-toggle" type="checkbox"> 傾斜量図</label><button class="select-opacity" type="button" data-select-layer="slope" aria-label="傾斜量図の不透明度を調整">⚙</button></div>
@@ -313,12 +312,6 @@ for(const [key,name,tileId,extension,minZoom,maxNativeZoom,opacity,pane] of publ
  });
  layerSettings[key]={name,layer,opacity};
 }
-const nokonoshimaPlanBounds=[[33.60375394,130.29424667],[33.64256269,130.31476021]];
-const nokonoshimaPlan=L.imageOverlay('./data/nokonoshima-forest-plan.png',nokonoshimaPlanBounds,{pane:'historicPane',opacity:.72,interactive:false});
-layerSettings['nokonoshima-plan']={name:'福岡・能古島の施業実施計画図',layer:nokonoshimaPlan,opacity:72};
-document.getElementById('nokonoshima-plan-toggle').addEventListener('change',event=>{
- if(event.target.checked)map.fitBounds(nokonoshimaPlanBounds,{padding:[24,24],maxZoom:15});
-});
 const overlayControls=Object.entries(layerSettings).map(([key,item])=>{
  const input=document.getElementById(key+'-toggle');
  const update=()=>{if(input.checked)item.layer.addTo(map);else map.removeLayer(item.layer)};
@@ -382,7 +375,6 @@ let appendImportedCredits=()=>{};
 function updateVisibleCredits(){
   const credits=[gsiCredit]; // The base map is always displayed.
   if(map.hasLayer(forest))credits.push(forestCredit);
-  if(map.hasLayer(nokonoshimaPlan))credits.push('出典：<a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/attach/pdf/zumen-405.pdf" target="_blank" rel="noopener noreferrer">九州森林管理局 第7次国有林野施業実施計画図</a>（Forest GIS Hubが切り出し・位置合わせ）');
   if(map.hasLayer(layerSettings.geology.layer))credits.push(geologyCredit);
   if(map.hasLayer(layerSettings.relief.layer))credits.push('海域部は海上保安庁海洋情報部の資料を使用して作成');
   if(map.hasLayer(baseLayers.photo))credits.push('GRUS画像（© Axelspace）');

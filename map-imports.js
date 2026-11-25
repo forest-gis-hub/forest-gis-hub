@@ -40,7 +40,31 @@
         copy.textContent = 'コピーできませんでした';
       }
     });
-    popup.append(heading, element('div', details.join(' ／ ')), position, copy);
+    const save = element('button', 'この観測所をGeoJSONで保存');
+    save.type = 'button';
+    save.addEventListener('click', () => {
+      const feature = {
+        type:'Feature', id:station.id,
+        geometry:{type:'Point', coordinates:[latlng.lng,latlng.lat]},
+        properties:{...station},
+        source:stationSource, retrieved:'2026-11-25'
+      };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(feature,null,2)],{type:'application/geo+json'}));
+      const link = element('a');
+      link.href = url;
+      link.download = 'amedas-'+station.id+'.geojson';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    const values = element('a', '気象庁で過去の観測値をダウンロード ↗');
+    values.href = 'https://www.data.jma.go.jp/risk/obsdl/';
+    values.target = '_blank';
+    values.rel = 'noopener noreferrer';
+    const actions = element('p');
+    actions.append(save);
+    const history = element('p');
+    history.append(values);
+    popup.append(heading, element('div', details.join(' ／ ')), position, copy, actions, history);
     return popup;
   }
 

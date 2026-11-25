@@ -15,8 +15,7 @@
 
 ### 地図ビューアで取得できるデータ
 
-- [全国のアメダス観測所（GeoJSON）](https://forest-gis-hub.pages.dev/data/amedas-stations.geojson)。気象庁の公開データをもとに、観測所名と座標を収録しています。
-- [能古島の国有林野施業実施計画図（GeoTIFF）](https://forest-gis-hub.pages.dev/data/nokonoshima-forest-plan.tif)。九州森林管理局の公開図面を切り出し、地理院地図を基準に位置を合わせた試作です。図面の位置は目安です。
+- [全国のアメダス観測所（GeoJSON）](https://forest-gis-hub.pages.dev/data/amedas-stations.geojson)。気象庁の公開データをもとに、観測所名と座標を収録しています。地図では選んだ観測所だけ保存できます。雨量や気温などは[気象庁の過去の気象データ・ダウンロード](https://www.data.jma.go.jp/risk/obsdl/)から取得できます。
 
 再利用するときは、各データの出典と提供元の利用条件を確認してください。
 

@@ -9,34 +9,68 @@
 <style>
 :root{color-scheme:light;font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#20372d;background:#f5f7f4}*{box-sizing:border-box}body{margin:0}a{color:#246345}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #6bb58c;outline-offset:3px}header{background:#183b32;color:#fff} .header-inner{max-width:1120px;margin:auto;padding:15px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.brand{font-size:1.08rem;font-weight:800;letter-spacing:.02em;color:#fff;text-decoration:none}.header-nav{display:flex;gap:17px;align-items:center;flex-wrap:wrap}.header-nav a{color:#e4efe8;text-decoration:none;font-size:.87rem}.header-nav a[aria-current=page]{font-weight:800;border-bottom:2px solid #a4d3b3;padding-bottom:3px}.header-nav a:hover{text-decoration:underline}.hero{background:linear-gradient(115deg,#204f3d,#17382e);color:#fff;padding:46px 22px 48px}.hero-inner{max-width:1080px;margin:auto}.eyebrow{font-size:.75rem;letter-spacing:.14em;color:#b9d9c3;font-weight:700}.hero h1{font-size:clamp(1.8rem,4vw,2.65rem);margin:12px 0 13px}.hero p{margin:0;max-width:690px;color:#d9e9df;line-height:1.8;font-size:.96rem}.container{max-width:1120px;margin:0 auto;padding:32px 22px 65px}.intro{font-size:.9rem;line-height:1.8;color:#51665a;margin:0 0 22px}.search-panel{background:#fff;border:1px solid #dfe8e0;border-radius:14px;padding:19px;box-shadow:0 3px 16px #1a392a08}.search-label{display:block;font-weight:700;font-size:.88rem;margin-bottom:8px}.search{width:100%;padding:13px 15px;font:inherit;font-size:1rem;border:1px solid #c8d8ce;border-radius:9px;background:#fcfefd}.categories{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}.category-btn{border:1px solid #cbdcd0;background:#fff;color:#365c45;border-radius:999px;padding:8px 13px;cursor:pointer;font-size:.83rem;font-weight:600}.category-btn:hover{background:#eff6f0}.category-btn[aria-pressed=true]{background:#23583e;color:#fff;border-color:#23583e}.result-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:25px 0 15px}.result-bar h2{font-size:1.12rem;margin:0}.result-count{font-size:.85rem;color:#5e7164}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:#fff;border:1px solid #e0e9e1;border-radius:13px;padding:20px;display:flex;flex-direction:column;min-height:205px;box-shadow:0 3px 12px #183b3208}.card-top{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.tag{font-size:.7rem;color:#276143;background:#eaf4ed;border-radius:5px;padding:4px 8px;font-weight:700}.owner{font-size:.72rem;color:#6a7b70}.card h3{font-size:1.04rem;line-height:1.5;margin:14px 0 9px}.card p{font-size:.86rem;line-height:1.8;color:#53665b;margin:0 0 18px;flex:1}.card a{align-self:flex-start;font-size:.87rem;font-weight:700;text-decoration:none}.card a:hover{text-decoration:underline}.empty{padding:36px 20px;text-align:center;background:#fff;border:1px dashed #cbd9ce;border-radius:12px;color:#5b6b60}.note{margin:27px 0 0;color:#68786c;font-size:.78rem;line-height:1.8}footer{border-top:1px solid #dce5de;background:#edf2ed;color:#53675a;font-size:.8rem;padding:23px 22px;text-align:center}footer a{margin-left:10px}@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:580px){.header-inner{padding:14px 17px}.hero{padding:33px 18px}.container{padding:23px 16px 50px}.cards{grid-template-columns:1fr}.card{min-height:0}.search-panel{padding:15px}.header-nav{gap:12px}}
 .public-data{margin:0 0 18px;padding:15px 19px;border:1px solid #dfe8e0;border-radius:14px;background:#eaf4ed}.public-data a{font-weight:700}
+.quick-links{margin:0 0 18px}.quick-links h2{font-size:1rem;margin:0 0 8px}.quick-links ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.quick-links a{display:inline-block;padding:8px 11px;border-radius:8px;background:white;border:1px solid #dfe8e0;font-size:.83rem;font-weight:650;text-decoration:none}.quick-links a:hover{text-decoration:underline}
+.research-guide{margin:0 0 18px;padding:12px 15px;background:#fff;border:1px solid #dfe8e0;border-radius:10px}.research-guide summary{font-weight:700;cursor:pointer}
+.guide-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:12px 0}.guide-list h3{font-size:.92rem;margin:0}.guide-list p,.guide-list a{font-size:.84rem;line-height:1.65}.guide-list p{margin:5px 0}
+@media(max-width:700px){.guide-list{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><div class="header-inner"><a class="brand" href="./index.html">Forest GIS Hub</a><nav class="header-nav" aria-label="メインナビゲーション"><a href="./index.html">Home</a><a href="./map.html">Map</a><a href="./library.html" aria-current="page">Library</a><a href="./articles/index.html">Journal</a></nav></div></header>
 <section class="hero"><div class="hero-inner"><div class="eyebrow">FOREST GIS LIBRARY</div><h1>森林・GISの情報を、探しやすく。</h1><p>森林管理、地形、地理空間データ、GISソフトウェア。信頼できる公開情報への入口を、用途別にまとめました。</p></div></section>
-<main class="container"><p class="intro">公的機関や開発元が提供するサイトを中心に掲載しています。キーワード検索やカテゴリで、目的の情報を探せます。</p>
+<main class="container"><p class="intro">森林・林業の公開資料、現場の事例や読み物、GISデータを、キーワードやカテゴリで探せます。</p>
 <div class="public-data"><a href="./data/index.html">Forest GIS Hub公開データ（XYZタイル）</a></div>
+<nav class="quick-links" aria-label="目的から探す"><h2>目的から探す</h2><ul>
+<li><a href="?category=forest&amp;q=国有林+計画図">国有林の計画図を探す</a></li>
+<li><a href="?category=reading">林業の事例・読み物を探す</a></li>
+<li><a href="?category=gis">GISデータを探す</a></li>
+<li><a href="?category=weather">気象・河川の観測データを探す</a></li>
+</ul></nav>
+<details class="research-guide">
+<summary>調べ方の例を見る</summary>
+<div class="guide-list">
+<section><h3>国有林の計画図</h3><p>都道府県から原本を探し、森林計画区・計画の期間・図面番号を確認します。九州・沖縄は管内一覧から探せます。</p><a href="https://www.rinya.maff.go.jp/j/kokuyu_rinya/kokuyu_rin_map.html">全国の森林計画図</a> · <a href="https://www.rinya.maff.go.jp/kyusyu/keikaku/zumen.html">九州・沖縄の図面</a></section>
+<section><h3>林業の事例・読み物</h3><p>「林業の読み物」で絞り込んでから、「林道 事例」や「造林 コスト」のように調べたい作業を入力します。</p><a href="?category=reading&amp;q=林道+事例">林道の事例を探す</a> · <a href="?category=reading&amp;q=造林+コスト">造林の資料を探す</a></section>
+<section><h3>過去の雨量・気温</h3><p>Mapでアメダス観測所名と位置を調べ、気象庁で地点・期間・項目を選んで観測値を取得します。</p><a href="./map.html">Mapで観測所を探す</a> · <a href="https://www.data.jma.go.jp/risk/obsdl/">気象庁で観測値を取得</a></section>
+</div></details>
 <section class="search-panel" aria-label="リンクを検索"><label class="search-label" for="search">サイト名・キーワードで検索</label><input id="search" class="search" type="search" placeholder="例：林道、標高、航空写真、QGIS" autocomplete="off"><div class="categories" id="categories" role="group" aria-label="カテゴリで絞り込み"></div></section>
 <div class="result-bar"><h2>掲載サイト</h2><span id="count" class="result-count" role="status" aria-live="polite"></span></div><div id="cards" class="cards"></div><div id="empty" class="empty" hidden>該当するサイトが見つかりませんでした。検索語やカテゴリを変更してください。</div>
-<p class="note">※ 外部リンクは各提供元のWebサイトへ移動します。掲載情報やURLは変更される場合があります。2026年11月19日にリンク先を再点検しました（一部は動作未確認）。データの利用・再配布・地図への組み込みは、各提供元の利用規約を確認してください。掲載は推奨・提携を意味しません。</p></main>
+<p class="note">※ 外部リンクは各提供元のWebサイトへ移動します。掲載情報やURLは変更される場合があります。リンク点検日：2026年11月26日。データの利用・再配布・地図への組み込みは、各提供元の利用規約を確認してください。掲載は推奨・提携を意味しません。</p></main>
 <footer>© Forest GIS Hub <a href="./index.html">トップページへ</a></footer>
 <script>
 'use strict';
 // サイトを増やす場合は、この配列に1件ずつ追加してください。
 // URLと紹介内容は公開前に各サイトで再確認してください。
 const links = [
+ {name:"FOREST JOURNAL",org:"フォレストジャーナル編集部",category:"林業の読み物",description:"林業者へのインタビューや、スマート林業、機械、地域の取り組みを扱うWebメディア。",url:"https://forest-journal.jp/",keywords:"現場 インタビュー 機械 ドローン スマート林業"},
+ {name:"季刊 森林総研",org:"森林総合研究所",category:"林業の読み物",description:"森林や林業の研究成果を、図や写真を交えて解説する広報誌。バックナンバーも読めます。",url:"https://www.ffpri.go.jp/pubs/kikan/index.html",keywords:"研究 解説 雑誌 安全 森林生態 PDF"},
+ {name:"全国林業普及指導職員活動事例集",org:"全国林業改良普及協会",category:"林業の読み物",description:"都道府県の林業普及活動や、民有林と国有林の連携事例をまとめた公開資料。",url:"https://www.ringyou.or.jp/hukyu/detail_1938.html",keywords:"現場 事例 森林経営 民国連携 普及 PDF"},
+ {name:"造林の省力化・低コスト化",org:"林野庁",category:"林業の読み物",description:"低密度植栽や、伐採と地拵えの一体化について、導入事例と技術資料を読めます。",url:"https://www.rinya.maff.go.jp/j/kanbatu/houkokusho/syokusai.html",keywords:"現場 事例 造林 再造林 地拵え 植栽 コスト"},
+ {name:"路網に関する調査・事例集",org:"林野庁",category:"林業の読み物",description:"林道や森林作業道の整備に関する手引き、現場事例、調査報告書を掲載しています。",url:"https://www.rinya.maff.go.jp/j/seibi/sagyoudo/romou.html",keywords:"現場 事例 林道 森林作業道 路網 手引き"},
+ {name:"森ハブの事例・ガイドライン",org:"林野庁",category:"林業の読み物",description:"林業の新技術を現場で活かすための資料や、異分野から森林づくりに参入した事例を読めます。",url:"https://www.rinya.maff.go.jp/j/kaihatu/morihub/morihub.html",keywords:"現場 事例 スマート林業 技術開発 安全"},
+ {name:"国有林の森林計画図",org:"林野庁",category:"森林・林業",description:"地域ごとの国有林の森林計画図や施業実施計画図を探せます。",url:"https://www.rinya.maff.go.jp/j/kokuyu_rinya/kokuyu_rin_map.html",keywords:"国有林 施業実施計画 PDF 林班 小班 全国"},
+ {name:"九州の国有林の図面",org:"九州森林管理局",category:"森林・林業",description:"福岡など九州・沖縄の国有林について、地域別の図面や施業実施計画図を探せます。",url:"https://www.rinya.maff.go.jp/kyusyu/keikaku/zumen.html",keywords:"福岡 九州 国有林 林班 小班 施業実施計画 紙地図 PDF"},
+ {name:"森林・林業白書",org:"林野庁",category:"森林・林業",description:"森林資源、林業経営、木材需給などの動向を年度別の白書で調べられます。",url:"https://www.rinya.maff.go.jp/j/kikaku/hakusyo/",keywords:"統計 木材 林業経営 森林資源 白書"},
+ {name:"ふくおか森林オープンデータ",org:"福岡県",category:"GISデータ",description:"福岡県の地域森林計画対象民有林について、市町村別の小班データなどを取得できます。",url:"https://www.pref.fukuoka.lg.jp/contents/forest-opendata.html",keywords:"福岡 民有林 小班 保安林 GeoJSON 森林計画"},
+ {name:"植生調査・植生図",org:"環境省 生物多様性センター",category:"GISデータ",description:"自然環境保全基礎調査の植生図や整備状況を確認し、公開データを探せます。",url:"https://www.biodic.go.jp/kiso/vg/vg_kiso.html",keywords:"植生 植生図 森林 草地 自然環境"},
+ {name:"標高タイルの詳細仕様",org:"国土地理院",category:"GISデータ",description:"標高タイルの座標とPNGに格納された標高値の読み方を確認できます。",url:"https://maps.gsi.go.jp/development/demtile.html",keywords:"DEM 標高 数値標高モデル 勾配 傾斜 XYZ"},
+ {name:"日本シームレス地質図V2",org:"産総研 地質調査総合センター",category:"防災・地形",description:"全国の地質を統一された凡例で閲覧でき、地質図データやタイルの配信仕様も確認できます。",url:"https://gbank.gsj.jp/seamless/",keywords:"地質 岩石 地層 断層 地形 GIS XYZ"},
+ {name:"アメダス",org:"気象庁",category:"気象・水文",description:"気温、降水量、風などの観測値を地図や表で確認できます。",url:"https://www.jma.go.jp/bosai/amedas/",keywords:"気象観測所 雨量 降水 気温 風"},
+ {name:"過去の気象データ検索",org:"気象庁",category:"気象・水文",description:"地点と年月日を選び、過去の気温や降水量などを調べられます。",url:"https://www.data.jma.go.jp/stats/etrn/index.php",keywords:"気象観測所 雨量 降水 気温 過去 統計"},
+ {name:"水文水質データベース",org:"国土交通省",category:"気象・水文",description:"水系や観測所から、河川の水位、流量、雨量などの観測データを探せます。",url:"https://www1.river.go.jp/",keywords:"河川 水位 流量 水文 雨量 水質"},
  {name:'地理院地図',org:'国土地理院',category:'地図・航空写真',description:'地形図、空中写真、地形表現などをブラウザで閲覧できる地図サービス。',url:'https://maps.gsi.go.jp/',keywords:'地形図 標高 傾斜 航空写真'},
  {name:'地理院タイル一覧',org:'国土地理院',category:'GISデータ',description:'地理院地図で使われる各種タイルの仕様や提供情報を確認できます。',url:'https://maps.gsi.go.jp/development/ichiran.html',keywords:'XYZタイル 地図 API'},
- {name:'基盤地図情報ダウンロードサービス',org:'国土地理院',category:'GISデータ',description:'標高や基本項目など、国土の基盤となる地理空間情報を取得できます。',url:'https://service.gsi.go.jp/kiban/app/',keywords:'DEM 標高 数値標高モデル'},
- {name:'国土地理院 地図・空中写真閲覧サービス',org:'国土地理院',category:'地図・航空写真',description:'過去の地図や空中写真を検索・閲覧するためのサービス。',url:'https://service.gsi.go.jp/map-photos/',keywords:'歴史 空中写真 過去 写真'},
+ {name:'基盤地図情報ダウンロードサービス',org:'国土地理院',category:'GISデータ',description:'標高や基本項目など、国土の基盤となる地理空間情報を取得できます。',url:'https://www.gsi.go.jp/kiban/',keywords:'DEM 標高 数値標高モデル'},
+ {name:'国土地理院 地図・空中写真閲覧サービス',org:'国土地理院',category:'地図・航空写真',description:'過去の地図や空中写真を検索・閲覧するためのサービス。',url:'https://www.gsi.go.jp/MAP/maps_photo.html',keywords:'歴史 空中写真 過去 写真'},
  {name:'国土数値情報ダウンロードサイト',org:'国土交通省',category:'GISデータ',description:'土地利用、行政区域、自然・国土保全などのGISデータを公開。',url:'https://nlftp.mlit.go.jp/ksj/',keywords:'国有林 土地利用 行政界 シェープファイル'},
  {name:'G空間情報センター',org:'G空間情報センター',category:'GISデータ',description:'地理空間情報の公開データを探せるポータルサイト。',url:'https://front.geospatial.jp/',keywords:'G空間 地理空間情報 オープンデータ ダウンロード'},
  {name:'国土交通省 ハザードマップポータルサイト',org:'国土交通省',category:'防災・地形',description:'洪水、土砂災害などの防災情報を地図から確認できます。',url:'https://disaportal.gsi.go.jp/',keywords:'土砂災害 リスク 斜面'},
  {name:'林野庁',org:'農林水産省',category:'森林・林業',description:'森林・林業政策、国有林野、統計などの公式情報を掲載。',url:'https://www.rinya.maff.go.jp/',keywords:'国有林 林道 森林計画'},
  {name:'森林総合研究所',org:'森林研究・整備機構',category:'森林・林業',description:'森林科学や森林管理に関する研究成果・情報を発信。',url:'https://www.ffpri.go.jp/ffpri.html',keywords:'研究 森林調査 森林資源'},
  {name:'環境省 自然環境局 生物多様性センター',org:'環境省',category:'森林・林業',description:'植生や自然環境に関する調査情報・資料を公開。',url:'https://www.biodic.go.jp/',keywords:'植生図 自然環境 生態系'},
- {name:'JAXA 地球観測研究センター',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'衛星による地球観測やリモートセンシングの情報を発信（確認時は一時停止の案内を表示）。',url:'https://www.eorc.jaxa.jp/',keywords:'衛星画像 土地被覆 リモートセンシング'},
- {name:'JAXA G-Portal',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'JAXAの地球観測衛星データを検索・入手するためのポータル（今回、直接の動作確認は未完了）。',url:'https://gportal.jaxa.jp/',keywords:'衛星データ 観測'},
+ {name:'JAXA「だいち2号」（ALOS-2）',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'観測衛星「だいち2号」の概要と、レーダーによる地表観測の用途を紹介しています。',url:'https://www.jaxa.jp/projects/sat/alos2/index_j.html',keywords:'衛星画像 SAR レーダー 地表観測 リモートセンシング'},
+ {name:'JAXA G-Portal',org:'宇宙航空研究開発機構',category:'リモートセンシング',description:'JAXAの地球観測衛星データを検索・入手するポータル。',url:'https://www.gportal.jaxa.jp/?lang=ja',keywords:'衛星データ 観測'},
  {name:'QGIS',org:'QGIS Project',category:'GISソフト・技術',description:'オープンソースのデスクトップGIS。地図作成、空間解析、データ編集に対応。',url:'https://qgis.org/',keywords:'GIS 解析 無料 オープンソース'},
  {name:'QGIS ドキュメント・学習資料',org:'QGIS Project',category:'GISソフト・技術',description:'QGIS公式のドキュメント・学習資料への案内ページ。',url:'https://www.qgis.org/resources/hub/',keywords:'QGIS マニュアル 使い方'},
  {name:'GRASS GIS',org:'GRASS Development Team',category:'GISソフト・技術',description:'地形解析やラスタ・ベクタ処理に強みを持つオープンソースGIS。',url:'https://grass.osgeo.org/',keywords:'地形解析 標高 ラスタ'},
@@ -45,20 +79,26 @@ const links = [
  {name:'Copernicus Browser',org:'Copernicus Data Space Ecosystem',category:'リモートセンシング',description:'Sentinelなどの衛星画像を探索・可視化できるサービス。',url:'https://browser.dataspace.copernicus.eu/',keywords:'Sentinel 衛星画像 時系列'},
  {name:'USGS EarthExplorer',org:'米国地質調査所',category:'リモートセンシング',description:'Landsatなどの衛星画像や地理空間データを検索できるサービス。',url:'https://earthexplorer.usgs.gov/',keywords:'Landsat 衛星写真 標高'}
 ];
-const categoryNames=['すべて','森林・林業','地図・航空写真','GISデータ','防災・地形','リモートセンシング','GISソフト・技術'];
+const categoryLabels=new Map([['','すべて'],['forest','森林・林業'],['reading','林業の読み物'],['maps','地図・航空写真'],['gis','GISデータ'],['hazards','防災・地形'],['weather','気象・水文'],['satellite','リモートセンシング'],['software','GISソフト・技術']]);
+const initialParams=new URLSearchParams(location.search);
 const categories=document.getElementById('categories');
 const cards=document.getElementById('cards');
 const search=document.getElementById('search');
 const count=document.getElementById('count');
 const empty=document.getElementById('empty');
-let activeCategory='すべて';
-for(const name of categoryNames){
- const button=document.createElement('button');button.type='button';button.className='category-btn';button.textContent=name;button.setAttribute('aria-pressed',String(name===activeCategory));
- button.addEventListener('click',()=>{activeCategory=name;for(const b of categories.children)b.setAttribute('aria-pressed',String(b===button));render();});categories.append(button);
+let activeCategory=categoryLabels.has(initialParams.get('category'))?initialParams.get('category'):'';
+search.value=initialParams.get('q')||'';
+for(const [key,name] of categoryLabels){
+ const button=document.createElement('button');button.type='button';button.className='category-btn';button.textContent=name;button.setAttribute('aria-pressed',String(key===activeCategory));
+ button.addEventListener('click',()=>{activeCategory=key;for(const b of categories.children)b.setAttribute('aria-pressed',String(b===button));render();});categories.append(button);
 }
 function render(){
- const q=search.value.trim().normalize('NFKC').toLocaleLowerCase('ja');
- const filtered=links.filter(item=>(activeCategory==='すべて'||item.category===activeCategory)&&[item.name,item.org,item.category,item.description,item.keywords].join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));
+ const terms=search.value.normalize('NFKC').toLocaleLowerCase('ja').trim().split(/\s+/).filter(Boolean);
+ const filtered=links.filter(item=>{
+  if(activeCategory&&item.category!==categoryLabels.get(activeCategory))return false;
+  const keywords=[item.name,item.org,item.category,item.description,item.keywords].join(' ').normalize('NFKC').toLocaleLowerCase('ja');
+  return terms.every(term=>keywords.includes(term));
+ });
  const fragment=document.createDocumentFragment();
  for(const item of filtered){
   const article=document.createElement('article');article.className='card';
@@ -67,7 +107,7 @@ function render(){
   const org=document.createElement('span');org.className='owner';org.textContent=item.org;top.append(tag,org);
   const heading=document.createElement('h3');heading.textContent=item.name;
   const description=document.createElement('p');description.textContent=item.description;
-  const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='公式サイトを見る ↗';link.setAttribute('aria-label',item.name+'の公式サイトを新しいタブで開く');
+  const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=item.category==='林業の読み物'?'記事・資料を読む ↗':'公式サイトを見る ↗';link.setAttribute('aria-label',item.name+'を新しいタブで開く');
   article.append(top,heading,description,link);fragment.append(article);
  }
  cards.replaceChildren(fragment);count.textContent=filtered.length+'件 / 全'+links.length+'件';empty.hidden=filtered.length!==0;
